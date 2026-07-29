@@ -44,7 +44,7 @@ def front_end_command(args: argparse.Namespace) -> list[str]:
         "--fit-root",
         str(args.tokenizer_root),
         "--fit-model-root",
-        str(args.tokenizer_root),
+        str(args.tokenizer_root / "models"),
         "--expected-commit",
         FRONT_END_COMMIT,
     ]

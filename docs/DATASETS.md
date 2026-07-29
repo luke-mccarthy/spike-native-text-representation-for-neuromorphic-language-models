@@ -60,8 +60,9 @@ the corresponding language-model rows. Fitted binaries are not stored here.
 The expected location is:
 
 ```text
-tokenizers/fitted/<dataset>_<method>.model
-tokenizers/fitted/<dataset>_<method>.train.json
+tokenizers/fitted/models/<dataset>_<method>.model
+tokenizers/fitted/models/<dataset>_<method>.train.json
+tokenizers/fitted/parts/<dataset>_<method>.csv
 ```
 
 Use `python reproduce.py fit-tokenizer --row N` with rows 1–9 of
