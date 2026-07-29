@@ -23,6 +23,7 @@ configs/                  Frozen paper experiment grids
 docs/                     Dataset, environment, and provenance documentation
 results/
   front_end/              Raw 90-row front-end comparison
+  tokenizer_fits/         Raw 9-row tokenizer-fit records and audit
   temporal_decoders/      Raw 162-row decoder factorial
 scripts/                  Release-integrity utilities
 paper_code/               Curated paper runtime with descriptive public names

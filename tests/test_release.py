@@ -4,6 +4,7 @@ from scripts.validate_release import (
     validate_hashes,
     validate_source_manifest,
     validate_temporal_decoders,
+    validate_tokenizer_fits,
 )
 
 
@@ -25,3 +26,7 @@ def test_source_manifest() -> None:
 
 def test_temporal_decoder_archive() -> None:
     validate_temporal_decoders()
+
+
+def test_tokenizer_fit_archive() -> None:
+    validate_tokenizer_fits()

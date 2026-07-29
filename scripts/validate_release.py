@@ -24,12 +24,40 @@ EXPECTED_HASHES = {
         "5973bc8d1175fa403858606a10b39651cdfe8f138b9142495a4c3ddc8e1d60a2",
     "results/front_end/audit.json":
         "f2d717c16cabe3d330fc4d12620d3d6f34620e44f444870bdcb0d6123424ac29",
+    "results/front_end/slurm_accounting.psv":
+        "bec82ffa7882b520cea47c4cbf686e16db80896dfa2b67e84f59e8001d99820d",
     "results/temporal_decoders/all_rows.csv":
         "70e64ea88cd49856572121cb7d8e67879a8e7de7c37d84c51523ab4abe5366c2",
     "results/temporal_decoders/audit.json":
         "82495d4405905edeef5137b7aa4469f8ecabaac3f1e2c978eb68fb195e82eec6",
     "results/temporal_decoders/grid_manifest.json":
         "40c4c5c171fbfa36a8996b533cb654e2f6bab573c3f0761d4b2931cf2f94dabb",
+    "results/temporal_decoders/SHA256SUMS":
+        "7ce3de4f24a0a73b5d21a9ec8581d7fe22fa7bc47cae276c4067dc698c19b47a",
+    "results/temporal_decoders/parts_sha256.txt":
+        "0dbbca1f66dfcce3e4809c260aac50e02e971bfdd4dfbbfd2b3faa3001b4ed54",
+    "results/temporal_decoders/slurm_accounting.psv":
+        "9f22c70eebf1ddc224bca223360ae0da50061eac3a7a6fe3efb88a1ef618d1d5",
+    "results/tokenizer_fits/audit.json":
+        "278a49c7de36a53464a89469171f10b5f46c3e08732ab1dba268b3bacf6dc9f0",
+    "results/tokenizer_fits/parts/text8_bpe16000.csv":
+        "8c0048cd592d834d6c09086862c39804d6f185a888181cf9d0777b0dca25507a",
+    "results/tokenizer_fits/parts/text8_bpe8000.csv":
+        "60c9e712734a1dc554919529beeb2640044d04a227d735d6003cca914601b12d",
+    "results/tokenizer_fits/parts/text8_unigram4000.csv":
+        "7dc0ae40a6b660bf7df435d09de167e51be34478d14f84f485f70933527f22c5",
+    "results/tokenizer_fits/parts/tinystories_5000_bpe16000.csv":
+        "9ddcaaf42ea1e30046dc67ac79b0a07c42fd9f07d5bb45a942b5031e2bf50a44",
+    "results/tokenizer_fits/parts/tinystories_5000_bpe8000.csv":
+        "d84b95eee499a3f338b2b60fdf22b0b76f06ccf40891533ec1ef29f9ef775e6e",
+    "results/tokenizer_fits/parts/tinystories_5000_unigram4000.csv":
+        "68f595aadb9ba73b6b751014b4d914fe4e374c1aa0d67276eccfa58745701272",
+    "results/tokenizer_fits/parts/wikitext2_bpe16000.csv":
+        "a8ce55cde29d4db1b9164c97aca595e9a1aa9d0ae6822b8c0433b190d352ced6",
+    "results/tokenizer_fits/parts/wikitext2_bpe8000.csv":
+        "a2728408e5d07755035429d3ac014a8ca60c1df8e68b5943c6e4ab84babb9587",
+    "results/tokenizer_fits/parts/wikitext2_unigram4000.csv":
+        "755fbfebe59d462bd6327e65ed8ce7898bff5fc23c95b37d87ab06950d7526fc",
 }
 
 
@@ -117,6 +145,25 @@ def validate_temporal_decoders() -> None:
     )
 
 
+def validate_tokenizer_fits() -> None:
+    grid = csv_rows("configs/tokenizer_fits.csv")
+    part_paths = sorted((ROOT / "results/tokenizer_fits/parts").glob("*.csv"))
+    rows = []
+    for path in part_paths:
+        rows.extend(csv_rows(str(path.relative_to(ROOT))))
+    audit = json.loads((ROOT / "results/tokenizer_fits/audit.json").read_text())
+    require(len(grid) == 9, "tokenizer-fit grid must contain 9 rows")
+    require(len(part_paths) == 9, "tokenizer-fit archive must contain 9 parts")
+    require(len(rows) == 9, "tokenizer-fit parts must contain 9 rows")
+    require(audit["status"] == "PASS", "tokenizer-fit audit did not pass")
+    require(audit["valid_rows"] == 9, "tokenizer-fit audit row count differs")
+    require(audit["test_split_touched"] == 0, "tokenizer fitting touched test data")
+    require(
+        {row["task_id"] for row in rows} == {str(index) for index in range(1, 10)},
+        "tokenizer-fit task identifiers differ",
+    )
+
+
 def validate_hashes() -> None:
     for relative, expected in EXPECTED_HASHES.items():
         actual = sha256(ROOT / relative)
@@ -190,6 +237,7 @@ def main() -> None:
     validate_hashes()
     validate_source_manifest()
     validate_environment_evidence()
+    validate_tokenizer_fits()
     validate_front_end()
     validate_temporal_decoders()
     print("PASS: release grids, raw archives, audits, and hashes are consistent")

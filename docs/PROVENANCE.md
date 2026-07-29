@@ -41,6 +41,7 @@ the development-repository location are recorded in
 |---|---:|---|
 | `results/front_end/all_rows.csv` | 90 | `5973bc8d1175fa403858606a10b39651cdfe8f138b9142495a4c3ddc8e1d60a2` |
 | `results/front_end/audit.json` | — | `f2d717c16cabe3d330fc4d12620d3d6f34620e44f444870bdcb0d6123424ac29` |
+| `results/tokenizer_fits/audit.json` | 9 | `278a49c7de36a53464a89469171f10b5f46c3e08732ab1dba268b3bacf6dc9f0` |
 | `results/temporal_decoders/all_rows.csv` | 162 | `70e64ea88cd49856572121cb7d8e67879a8e7de7c37d84c51523ab4abe5366c2` |
 | `results/temporal_decoders/audit.json` | — | `82495d4405905edeef5137b7aa4469f8ecabaac3f1e2c978eb68fb195e82eec6` |
 | `results/temporal_decoders/grid_manifest.json` | — | `40c4c5c171fbfa36a8996b533cb654e2f6bab573c3f0761d4b2931cf2f94dabb` |
