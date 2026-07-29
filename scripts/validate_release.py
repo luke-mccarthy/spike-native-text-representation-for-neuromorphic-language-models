@@ -18,7 +18,7 @@ EXPECTED_HASHES = {
     "configs/temporal_decoder_test.csv":
         "0adb5b3495873125e0a3da766194f38c0bca131c0dee2296c295d281d440a1ca",
     "configs/tokenizer_fits.csv":
-        "b20fdb94ab5a0cbd95d939072ebdb8d89a41d0f0d49823733ae6fc8923db7135",
+        "f7aa00ff8be391d496fa6c9d8dd8454d5a7fc232dd596a3df67c671a3af88e3a",
     "results/front_end/all_rows.csv":
         "5973bc8d1175fa403858606a10b39651cdfe8f138b9142495a4c3ddc8e1d60a2",
     "results/front_end/audit.json":
