@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this code or its archived experimental records, please cite the associated paper."
+title: "Toward Spike-Native Text Representation"
+type: software
+authors:
+  - family-names: McCarthy
+    given-names: Luke
+repository-code: "https://github.com/luke-mccarthy/toward-spike-native-text-representation"
+version: "0.1.0-review"
+date-released: 2026-07-29
+preferred-citation:
+  type: article
+  title: "Interrogating Text Representation for Spike-Native Language Modelling: An Audited Front-End and Temporal-Decoder Study"
+  authors:
+    - family-names: McCarthy
+      given-names: Luke
+  year: 2026

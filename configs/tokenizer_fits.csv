@@ -1,0 +1,10 @@
+data_tier,dataset,method,task_id,training_byte_budget
+full_train_validation,tinystories_5000,bpe8000,1,1000000
+full_train_validation,tinystories_5000,bpe16000,2,1000000
+full_train_validation,tinystories_5000,unigram4000,3,1000000
+full_train_validation,text8,bpe8000,4,1000000
+full_train_validation,text8,bpe16000,5,1000000
+full_train_validation,text8,unigram4000,6,1000000
+full_train_validation,wikitext2,bpe8000,7,1000000
+full_train_validation,wikitext2,bpe16000,8,1000000
+full_train_validation,wikitext2,unigram4000,9,1000000

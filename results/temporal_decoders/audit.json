@@ -1,0 +1,20 @@
+{
+  "all_strict_heads_expansion_eligible": 0,
+  "any_strict_head_expansion_eligible": 0,
+  "development_expected_rows": 0,
+  "direct_ttfs_expansion_eligible": 0,
+  "eligible_strict_heads": [],
+  "engineering_pass_rows": 0,
+  "expected_commit": "e20afbd166099210cca18be089e6aae447f6e56a",
+  "expected_rows": 162,
+  "format": "strict_ttfs_output_audit_r4",
+  "invalid_rows": [],
+  "missing_rows": [],
+  "nibble_ttfs_expansion_eligible": 0,
+  "phase": "development",
+  "recommended_by_head": {},
+  "same_canonical_data_across_heads": 1,
+  "status": "PASS",
+  "test_split_touched": 1,
+  "valid_rows": 162
+}

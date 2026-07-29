@@ -1,0 +1,4 @@
+JobIDRaw|JobID|JobName|State|ExitCode|Elapsed|TotalCPU|CPUTimeRAW|AveCPUFreq|ConsumedEnergy|ConsumedEnergyRaw|MaxRSS|ReqMem|AllocCPUS|NodeList
+26684747|26684747|ttfs_pre_r4|COMPLETED|0:0|00:08:18|08:09.309|996||0|0||8G|2|bun139
+26684747.batch|26684747.batch|batch|COMPLETED|0:0|00:08:18|08:09.307|996|2.59M|0|0|608144K||2|bun139
+26684747.extern|26684747.extern|extern|COMPLETED|0:0|00:08:19|00:00.001|998|2.75G|0|0|0||2|bun139

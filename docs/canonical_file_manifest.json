@@ -1,0 +1,61 @@
+{
+  "protocol_id": "canonical_frontend_protocol_2026_07_16_v1",
+  "manifest_sha256": "2df8d3db63d64c27ee15ad45c8650321451b14155e15dbb7fa3ec4afd240a210",
+  "files": [
+    {
+      "relative_path": "text8/test.txt",
+      "role": "confirmation_test",
+      "bytes": 5000000,
+      "sha256": "b336f67a7616a0d94ed6cc2049437928aafe01318e76a84abe6918320660f98c"
+    },
+    {
+      "relative_path": "text8/train.txt",
+      "role": "confirmation_train",
+      "bytes": 90000000,
+      "sha256": "af83e65b7d7aa95dfe2c571da8f3e2d1b0c385f177140a21f3db07520a3ac6f4"
+    },
+    {
+      "relative_path": "text8/validation.txt",
+      "role": "confirmation_validation",
+      "bytes": 5000000,
+      "sha256": "c9395f11fb185c7cf73f57134be37b6a32c6364ce36e9cec3127d27c7b8bc5dd"
+    },
+    {
+      "relative_path": "tinystories_5000/test.txt",
+      "role": "confirmation_test",
+      "bytes": 425625,
+      "sha256": "51660a9de42d08ce8df59e4bc1d1f157eafacbeac95ca93dd379bcc03ffb0ef2"
+    },
+    {
+      "relative_path": "tinystories_5000/train.txt",
+      "role": "confirmation_train",
+      "bytes": 3411397,
+      "sha256": "dcf97388f45dd20205d8bc11c6fc2863470e164ff5d7ae0c9b71e8f4b705154b"
+    },
+    {
+      "relative_path": "tinystories_5000/validation.txt",
+      "role": "confirmation_validation",
+      "bytes": 425266,
+      "sha256": "7c99de3e361eb8dfccc4d9dfa733385f52282c08bd357cc2f927f57e127af881"
+    },
+    {
+      "relative_path": "wikitext2/test.txt",
+      "role": "confirmation_test",
+      "bytes": 1322333,
+      "sha256": "d1f397da1cdb1d831fff0b8c86cafa235c600152e14af99104763b596d2268b5"
+    },
+    {
+      "relative_path": "wikitext2/train.txt",
+      "role": "confirmation_train",
+      "bytes": 11200031,
+      "sha256": "a40084befd81e48141f87d1dbaa9fceb7f873af28242d6d5f884883d66fae116"
+    },
+    {
+      "relative_path": "wikitext2/validation.txt",
+      "role": "confirmation_validation",
+      "bytes": 1173762,
+      "sha256": "fe433030de4631511a4dd79ac98f9e9b8d6cf44332ebe2e0ce275eb985b1221e"
+    }
+  ]
+}
+

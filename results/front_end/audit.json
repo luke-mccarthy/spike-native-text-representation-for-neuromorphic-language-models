@@ -1,0 +1,38 @@
+{
+  "all_patch_candidates_codec_free_and_spike_communicating": 1,
+  "all_patch_candidates_reduce_global_steps_below_byte_rate": 1,
+  "all_three_datasets_present": 1,
+  "canonical_validation_is_development_evidence": 0,
+  "dataset_contract_problems": [],
+  "datasets": [
+    "text8",
+    "tinystories_5000",
+    "wikitext2"
+  ],
+  "directly_comparable_common_split_test_results_ready": 1,
+  "energy_is_scenario_projection_not_hardware_measurement": 1,
+  "evaluation_source": "canonical_test",
+  "expected_commit": "95f148159b9b340c2f679c0d10eedf1e35b936f9",
+  "expected_rows": 90,
+  "fit_benchmark_problems": [],
+  "format": "scalable_patch_frontend_audit_v1",
+  "fresh_three_dataset_confirmation_required_for_novel_confirmatory_claim": 1,
+  "grid_integrity_problems": [],
+  "grid_sha256": "27a5e8108796bd10eb5f039449570d13595105114ee31d9b7f96b3f59de4e787",
+  "invalid_rows": [],
+  "malformed_files": [],
+  "missing_run_names": [],
+  "positive_spiking_result_required_for_audit_pass": 0,
+  "post_hoc_common_split_test_datasets": [
+    "tinystories_5000",
+    "wikitext2"
+  ],
+  "status": "PASS",
+  "test_result_interpretation": "mixed_untouched_text8_and_post_hoc_tinystories_wikitext2",
+  "test_split_touched": 1,
+  "unexpected_run_names": [],
+  "untouched_confirmation_datasets": [
+    "text8"
+  ],
+  "valid_rows": 90
+}

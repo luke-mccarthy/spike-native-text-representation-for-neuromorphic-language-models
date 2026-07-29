@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spike-native-text-representation"
+version = "0.1.0"
+description = "Reproduction artifact for spike-native text-representation experiments"
+requires-python = "==3.10.*"
+dependencies = [
+  "numpy==2.2.6",
+  "sentencepiece==0.2.1",
+  "snntorch==0.9.4",
+  "torch==2.11.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest==8.4.1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

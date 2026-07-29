@@ -1,0 +1,68 @@
+{
+  "configuration_identity_sha256": "138f86bf1131a4dc08d2a3ba9fdd84ebceb379baa2a89e3b594209691d16aebb",
+  "format": "strict_ttfs_output_grid_manifest_r4",
+  "grid_file": "development_grid.csv",
+  "grid_sha256": "0adb5b3495873125e0a3da766194f38c0bca131c0dee2296c295d281d440a1ca",
+  "identity": {
+    "architectures": [
+      {
+        "name": "fixed_patch4_positional",
+        "patch_mode": "fixed",
+        "patches_per_block": 32
+      },
+      {
+        "name": "fixed_patch8_hierarchical_lif",
+        "patch_mode": "fixed",
+        "patches_per_block": 16
+      },
+      {
+        "name": "joint_patch8_hierarchical_lif",
+        "patch_mode": "joint_snn_homeostatic",
+        "patches_per_block": 16
+      }
+    ],
+    "calibration_expected_commit": "e20afbd166099210cca18be089e6aae447f6e56a",
+    "datasets": [
+      "text8",
+      "tinystories_5000",
+      "wikitext2"
+    ],
+    "decoder_capacities": [
+      {
+        "hidden_dim": 64,
+        "name": "matched_v1_capacity",
+        "num_layers": 1,
+        "scientific_role": "same_local_decoder_capacity_as_audited_v1_patch_rows"
+      },
+      {
+        "hidden_dim": 128,
+        "name": "enlarged_capacity",
+        "num_layers": 2,
+        "scientific_role": "capacity_decoupled_from_shared_global_backbone"
+      }
+    ],
+    "eligible_strict_heads": [
+      "ttfs_direct_256",
+      "ttfs_nibble_2x16"
+    ],
+    "output_heads": [
+      "dense_reference",
+      "ttfs_direct_256",
+      "ttfs_nibble_2x16"
+    ],
+    "phase": "development",
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "target_boundary_rate_per_byte": 0.2
+  },
+  "phase": "development",
+  "rows": 162,
+  "same_canonical_data_across_heads": 1,
+  "same_seeds_across_heads": 1,
+  "shared_global_backbone_unchanged": 1,
+  "status": "PASS",
+  "test_split_touched": 1
+}

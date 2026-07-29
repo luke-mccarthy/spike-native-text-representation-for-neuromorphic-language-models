@@ -1,0 +1,57 @@
+{
+  "format": "paper_code_source_manifest_v1",
+  "front_end_commit": "95f148159b9b340c2f679c0d10eedf1e35b936f9",
+  "temporal_decoder_commit": "e20afbd166099210cca18be089e6aae447f6e56a",
+  "files": {
+    "scripts/audit_2026_07_16_canonical_frontend_representations.py": "a390899b5110552105d5ba4a483b783c1e965874",
+    "scripts/make_2026_07_22_decisive_frontend_grids.py": "d623c34297952dd4fb567a1d1437cb66c1349119",
+    "scripts/measure_2026_07_22_sentencepiece_fit.py": "32350344f6e1a1b53b8f6700a514bfc43f880732",
+    "scripts/prepare_2026_07_16_canonical_splits.py": "f4a71d8aabe0a4c286175f9e22e3d7f7b4514651",
+    "scripts/run_2026_07_22_decisive_frontend_row.py": "63b93892ac53179ec286d1ddf8020bbf17c75953",
+    "scripts/run_2026_07_23_scalable_patch_frontend_row.py": "744f23aeeef6fc165bb9f7fdc2d9acb79722e279",
+    "scripts/train_2026_07_17_canonical_lm.py": "95d16a1c19fe004786365e7091b4758f3e4080a5",
+    "scripts/train_2026_07_23_scalable_patch_lm.py": "114aa9bfe995e5d42a326f80a186dbe2ca99cced",
+    "scripts/train_2026_07_28_spike_output_decoder_lm.py": "0fcb8a0144d66ced51b4acc2804d6d9040de8059",
+    "scripts/train_2026_07_28_strict_ttfs_output_lm.py": "a18cd32d85954f95960bda1195991242760768e7",
+    "scripts/train_2026_07_28_strict_ttfs_output_lm_r4.py": "28080a55a807237e16ab5a7a20a49ec98db81303",
+    "src/canonical_data_contract.py": "8f51d6c10ab036f1b0c2e4d7d14db4f86eeffd93",
+    "src/energy/analytical_compute.py": "0ecc3176e4b781d2c61e1d8447464d515121cc89",
+    "src/energy/decisive_projection.py": "018927d242913c4bc9f018c8b2d0e7fbe6e53e81",
+    "src/energy/frontend_memory.py": "1e68dfdaeaebc660f3900b59845cbd0b5724f419",
+    "src/energy/scalable_patch_projection.py": "97954863f5ff251d974af1875e31b6f4bf56fef1",
+    "src/energy/scalable_patch_projection_r4.py": "761ed7d457c7dc8727d34accd921f49366a8f660",
+    "src/models/spike_input_interfaces.py": "41eb92706aa45477c9beb53cf8eda982c66bf234",
+    "src/models/spike_native_patch_lm.py": "51d83f7c27705069c07c97f642c2c0d07f14bfaf",
+    "src/models/spike_native_patch_lm_v2.py": "4fdd0aa4b68f102708889a9089b8765aa4e564a7",
+    "src/models/spike_native_patch_lm_v3.py": "6cec3f456a107f73468571021fa70bdf33443853",
+    "src/models/spike_native_patch_lm_v5.py": "380ab484f2efcfa8177536d67eeef9539ac5cf58",
+    "src/models/spike_native_patch_lm_v6.py": "b093d236db2543132b8e07ca2b8e4cb98170fc42",
+    "src/models/spike_native_patch_lm_v7.py": "78bcd7598e940517ee5fc22837c2e33d00a037c5",
+    "src/models/spike_native_patch_lm_v8.py": "a1556de70f6700f3eacaa8d4ee5ca4d897484a8f",
+    "src/models/spike_native_patch_lm_v9.py": "fa0d0589a255705254932a978ed872e2f630b27e",
+    "src/models/spikegpt_operation_accounting.py": "6cccb4ff938e45b254de0032ae10935294d16097",
+    "src/models/spikegpt_reference.py": "98bf7c02ff26044d54ccd7c38263df8b3a5784ac",
+    "src/models/spiking_lm_models.py": "e78136ec4227f4d1fe0911845241beee5e8855b1",
+    "src/models/srwkv_operation_accounting.py": "84a911e4e893b950e0bb16c989e4fcaf20aa7cc0",
+    "src/models/strict_spiking_backbones_v2.py": "8c0bee89666adb8c8fd6e4a427087af20cf71647",
+    "src/tokenizers/blt_patcher.py": "2227b8b1600f48540c7d75f39f6c44a87905828d",
+    "src/tokenizers/gpt_neox_20b.py": "aba05db1d1ac4076c65efecd2e8120caa98dbd8e",
+    "src/tokenizers/lossless_codecs.py": "af4a739dce115dd1d88548896fe202daa7e87f45",
+    "src/tokenizers/spike_boundary_native_levels.py": "06a0a2ae6f99e953d9a117ed7b23aaf2a74d0e47",
+    "src/tokenizers/spike_boundary_refined.py": "6a7f7d52633d60deb8646ecdb6e669dfda8f117d",
+    "src/tokenizers/spike_native_patch_frontends.py": "8d3c2a5eacd81094ae8748d18a8e1189c88355cb",
+    "src/tokenizers/spiking_blt_frontend.py": "ff56542f68cc988af0d1f7c86f9b4cc85f0a42b6"
+  },
+  "portability_patches": [
+    {
+      "path": "scripts/train_2026_07_17_canonical_lm.py",
+      "change": "Read the canonical data root from SPIKE_TOKENIZER_CANONICAL_ROOT with the original Bunya path as fallback.",
+      "original_copy": "provenance/original_source/scripts/train_2026_07_17_canonical_lm.py"
+    },
+    {
+      "path": "scripts/measure_2026_07_22_sentencepiece_fit.py",
+      "change": "Read the canonical data root from SPIKE_TOKENIZER_CANONICAL_ROOT with the original Bunya path as fallback.",
+      "original_copy": "provenance/original_source/scripts/measure_2026_07_22_sentencepiece_fit.py"
+    }
+  ]
+}
