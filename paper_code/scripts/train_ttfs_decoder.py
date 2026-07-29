@@ -17,13 +17,13 @@ if str(ROOT) not in sys.path:
 import torch
 import torch.nn.functional as F
 
-from scripts.train_2026_07_17_canonical_lm import DATASET_TIERS, read_strict, utf8_safe_prefix
-from scripts.train_2026_07_23_scalable_patch_lm import (
+from scripts.train_frontend_language_model import DATASET_TIERS, read_strict, utf8_safe_prefix
+from scripts.train_patch_language_model import (
     build_patch_sequence,
     optimizer_step_count,
     segmenter_counts,
 )
-from scripts.train_2026_07_28_spike_output_decoder_lm import (
+from scripts.train_spike_count_decoder import (
     CANONICAL_ROOT,
     add_counts,
     atomic_row,
@@ -36,10 +36,10 @@ from src.canonical_data_contract import (
 )
 from src.energy.scalable_patch_projection import scalable_patch_projection
 from src.models.spike_native_patch_lm import complete_patch_blocks, merge_additive_stats
-from src.models.spike_native_patch_lm_v6 import (
+from src.models.strict_ttfs_patch_decoder import (
     OUTPUT_HEADS,
     PATCH_ARCHITECTURES,
-    SpikeNativePatchLanguageModelV6,
+    StrictTTFSPatchLanguageModel,
 )
 from src.tokenizers.spike_native_patch_frontends import (
     JointSpikingPatchSegmenter,
@@ -51,7 +51,7 @@ FORMAT = "strict_ttfs_output_decoder_row_v1"
 
 def run_blocks(
     *,
-    model: SpikeNativePatchLanguageModelV6,
+    model: StrictTTFSPatchLanguageModel,
     sequence,
     patches_per_block: int,
     batch_size: int,
@@ -279,7 +279,7 @@ def main() -> None:
         if segmenter is not None and segmenter.encoder.state_digest() != segmenter_state:
             raise AssertionError("test changed frozen segmenter state")
 
-    model = SpikeNativePatchLanguageModelV6(
+    model = StrictTTFSPatchLanguageModel(
         max_patch_bytes=int(spec["max_patch_bytes"]),
         hierarchical_encoder=bool(spec["hierarchical"]),
         output_head=args.output_head,

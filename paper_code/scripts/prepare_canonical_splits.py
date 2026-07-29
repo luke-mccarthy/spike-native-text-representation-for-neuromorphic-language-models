@@ -23,8 +23,12 @@ from typing import Dict, Iterable, List, Mapping, Sequence, Tuple
 PROTOCOL_ID = "canonical_frontend_protocol_2026_07_16_v1"
 MANIFEST_NAME = "manifest.json"
 TINYSTORIES_MARKER = b"<|endoftext|>"
+PUBLIC_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT_ROOT = Path(
-    "/scratch/user/lukemccarthy/datasets/spike_tokenizer_canonical_2026_07_16"
+    os.environ.get(
+        "SPIKE_TOKENIZER_CANONICAL_ROOT",
+        str(PUBLIC_ROOT / "data/canonical"),
+    )
 )
 
 
@@ -369,23 +373,23 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--text8-full",
-        default="/scratch/user/lukemccarthy/datasets/text8/text8_full.txt",
+        required=True,
     )
     parser.add_argument(
         "--tinystories-5000",
-        default="/scratch/user/lukemccarthy/datasets/tinystories/tinystories_5000.txt",
+        required=True,
     )
     parser.add_argument(
         "--wikitext2-train",
-        default="/scratch/user/lukemccarthy/datasets/wikitext2/wikitext2_train.txt",
+        required=True,
     )
     parser.add_argument(
         "--wikitext2-validation",
-        default="/scratch/user/lukemccarthy/datasets/wikitext2/wikitext2_validation.txt",
+        required=True,
     )
     parser.add_argument(
         "--wikitext2-test",
-        default="/scratch/user/lukemccarthy/datasets/wikitext2/wikitext2_test.txt",
+        required=True,
     )
     parser.add_argument("--output-root", default=str(DEFAULT_OUTPUT_ROOT))
     parser.add_argument("--tinystories-seed", type=int, default=20260716)

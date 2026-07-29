@@ -1,57 +1,275 @@
 {
-  "format": "paper_code_source_manifest_v1",
+  "format": "paper_code_source_manifest_v2",
   "front_end_commit": "95f148159b9b340c2f679c0d10eedf1e35b936f9",
   "temporal_decoder_commit": "e20afbd166099210cca18be089e6aae447f6e56a",
+  "naming_policy": "Public runtime paths and Python identifiers are descriptive. Original development names remain only as provenance metadata and in two unmodified portability-source copies.",
   "files": {
-    "scripts/audit_2026_07_16_canonical_frontend_representations.py": "a390899b5110552105d5ba4a483b783c1e965874",
-    "scripts/make_2026_07_22_decisive_frontend_grids.py": "d623c34297952dd4fb567a1d1437cb66c1349119",
-    "scripts/measure_2026_07_22_sentencepiece_fit.py": "32350344f6e1a1b53b8f6700a514bfc43f880732",
-    "scripts/prepare_2026_07_16_canonical_splits.py": "f4a71d8aabe0a4c286175f9e22e3d7f7b4514651",
-    "scripts/run_2026_07_22_decisive_frontend_row.py": "63b93892ac53179ec286d1ddf8020bbf17c75953",
-    "scripts/run_2026_07_23_scalable_patch_frontend_row.py": "744f23aeeef6fc165bb9f7fdc2d9acb79722e279",
-    "scripts/train_2026_07_17_canonical_lm.py": "95d16a1c19fe004786365e7091b4758f3e4080a5",
-    "scripts/train_2026_07_23_scalable_patch_lm.py": "114aa9bfe995e5d42a326f80a186dbe2ca99cced",
-    "scripts/train_2026_07_28_spike_output_decoder_lm.py": "0fcb8a0144d66ced51b4acc2804d6d9040de8059",
-    "scripts/train_2026_07_28_strict_ttfs_output_lm.py": "a18cd32d85954f95960bda1195991242760768e7",
-    "scripts/train_2026_07_28_strict_ttfs_output_lm_r4.py": "28080a55a807237e16ab5a7a20a49ec98db81303",
-    "src/canonical_data_contract.py": "8f51d6c10ab036f1b0c2e4d7d14db4f86eeffd93",
-    "src/energy/analytical_compute.py": "0ecc3176e4b781d2c61e1d8447464d515121cc89",
-    "src/energy/decisive_projection.py": "018927d242913c4bc9f018c8b2d0e7fbe6e53e81",
-    "src/energy/frontend_memory.py": "1e68dfdaeaebc660f3900b59845cbd0b5724f419",
-    "src/energy/scalable_patch_projection.py": "97954863f5ff251d974af1875e31b6f4bf56fef1",
-    "src/energy/scalable_patch_projection_r4.py": "761ed7d457c7dc8727d34accd921f49366a8f660",
-    "src/models/spike_input_interfaces.py": "41eb92706aa45477c9beb53cf8eda982c66bf234",
-    "src/models/spike_native_patch_lm.py": "51d83f7c27705069c07c97f642c2c0d07f14bfaf",
-    "src/models/spike_native_patch_lm_v2.py": "4fdd0aa4b68f102708889a9089b8765aa4e564a7",
-    "src/models/spike_native_patch_lm_v3.py": "6cec3f456a107f73468571021fa70bdf33443853",
-    "src/models/spike_native_patch_lm_v5.py": "380ab484f2efcfa8177536d67eeef9539ac5cf58",
-    "src/models/spike_native_patch_lm_v6.py": "b093d236db2543132b8e07ca2b8e4cb98170fc42",
-    "src/models/spike_native_patch_lm_v7.py": "78bcd7598e940517ee5fc22837c2e33d00a037c5",
-    "src/models/spike_native_patch_lm_v8.py": "a1556de70f6700f3eacaa8d4ee5ca4d897484a8f",
-    "src/models/spike_native_patch_lm_v9.py": "fa0d0589a255705254932a978ed872e2f630b27e",
-    "src/models/spikegpt_operation_accounting.py": "6cccb4ff938e45b254de0032ae10935294d16097",
-    "src/models/spikegpt_reference.py": "98bf7c02ff26044d54ccd7c38263df8b3a5784ac",
-    "src/models/spiking_lm_models.py": "e78136ec4227f4d1fe0911845241beee5e8855b1",
-    "src/models/srwkv_operation_accounting.py": "84a911e4e893b950e0bb16c989e4fcaf20aa7cc0",
-    "src/models/strict_spiking_backbones_v2.py": "8c0bee89666adb8c8fd6e4a427087af20cf71647",
-    "src/tokenizers/blt_patcher.py": "2227b8b1600f48540c7d75f39f6c44a87905828d",
-    "src/tokenizers/gpt_neox_20b.py": "aba05db1d1ac4076c65efecd2e8120caa98dbd8e",
-    "src/tokenizers/lossless_codecs.py": "af4a739dce115dd1d88548896fe202daa7e87f45",
-    "src/tokenizers/spike_boundary_native_levels.py": "06a0a2ae6f99e953d9a117ed7b23aaf2a74d0e47",
-    "src/tokenizers/spike_boundary_refined.py": "6a7f7d52633d60deb8646ecdb6e669dfda8f117d",
-    "src/tokenizers/spike_native_patch_frontends.py": "8d3c2a5eacd81094ae8748d18a8e1189c88355cb",
-    "src/tokenizers/spiking_blt_frontend.py": "ff56542f68cc988af0d1f7c86f9b4cc85f0a42b6"
+    "scripts/audit_frontend_representations.py": {
+      "source_path": "scripts/audit_2026_07_16_canonical_frontend_representations.py",
+      "source_blob_sha1": "a390899b5110552105d5ba4a483b783c1e965874",
+      "runtime_sha256": "e41cf04f4481916ca6df3404288aca05fcb2e1eab5943d8a3344f8334e33e9c6",
+      "transformation": "portability_and_semantic_path"
+    },
+    "scripts/build_frontend_grids.py": {
+      "source_path": "scripts/make_2026_07_22_decisive_frontend_grids.py",
+      "source_blob_sha1": "d623c34297952dd4fb567a1d1437cb66c1349119",
+      "runtime_sha256": "100178c72dccb8be54201b5ecee4f0c4c1b648702e6841bce9d5f5f13ac72f33",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "scripts/fit_sentencepiece_tokenizer.py": {
+      "source_path": "scripts/measure_2026_07_22_sentencepiece_fit.py",
+      "source_blob_sha1": "32350344f6e1a1b53b8f6700a514bfc43f880732",
+      "runtime_sha256": "73ebb86b3632530fa1a677ae17eab338b9824c7d12446656c8ce0d92038759a1",
+      "transformation": "portability_and_semantic_path"
+    },
+    "scripts/prepare_canonical_splits.py": {
+      "source_path": "scripts/prepare_2026_07_16_canonical_splits.py",
+      "source_blob_sha1": "f4a71d8aabe0a4c286175f9e22e3d7f7b4514651",
+      "runtime_sha256": "509a90308c49cff960f7f56b6ab12d7f1712ec6e18064630b439216555a03090",
+      "transformation": "portability_and_semantic_path"
+    },
+    "scripts/run_frontend_comparison.py": {
+      "source_path": "scripts/run_2026_07_23_scalable_patch_frontend_row.py",
+      "source_blob_sha1": "744f23aeeef6fc165bb9f7fdc2d9acb79722e279",
+      "runtime_sha256": "4b8014a59064dcddc47a64e75a0c8ca236f3f0639f22d0ff66a8e3bb9491daaa",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "scripts/run_frontend_row.py": {
+      "source_path": "scripts/run_2026_07_22_decisive_frontend_row.py",
+      "source_blob_sha1": "63b93892ac53179ec286d1ddf8020bbf17c75953",
+      "runtime_sha256": "4a31951a7bb78b4ebcf7162d9857a9319a458ea5f36cb77690483038de6d1639",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "scripts/run_temporal_decoder_comparison.py": {
+      "source_path": "scripts/train_2026_07_28_strict_ttfs_output_lm_r4.py",
+      "source_blob_sha1": "28080a55a807237e16ab5a7a20a49ec98db81303",
+      "runtime_sha256": "b95325bfaab93bd02e9df23c5abd8310e548e1ad384ce2f7b36313ef2396a470",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "scripts/train_frontend_language_model.py": {
+      "source_path": "scripts/train_2026_07_17_canonical_lm.py",
+      "source_blob_sha1": "95d16a1c19fe004786365e7091b4758f3e4080a5",
+      "runtime_sha256": "13db73f80f1871890afe6c427d7d8a338d47e13277b93af92ab19c2d475f10b7",
+      "transformation": "portability_and_semantic_path"
+    },
+    "scripts/train_patch_language_model.py": {
+      "source_path": "scripts/train_2026_07_23_scalable_patch_lm.py",
+      "source_blob_sha1": "114aa9bfe995e5d42a326f80a186dbe2ca99cced",
+      "runtime_sha256": "52f775769a046f8bd6fa47088d01ee65c971ee588249b78b96015c04ddc4c5c4",
+      "transformation": "portability_and_semantic_path"
+    },
+    "scripts/train_spike_count_decoder.py": {
+      "source_path": "scripts/train_2026_07_28_spike_output_decoder_lm.py",
+      "source_blob_sha1": "0fcb8a0144d66ced51b4acc2804d6d9040de8059",
+      "runtime_sha256": "38de209079bcb0284662d5ec2da4e3deb651b61813b4cf0e09ac714eccfd174d",
+      "transformation": "portability_and_semantic_path"
+    },
+    "scripts/train_ttfs_decoder.py": {
+      "source_path": "scripts/train_2026_07_28_strict_ttfs_output_lm.py",
+      "source_blob_sha1": "a18cd32d85954f95960bda1195991242760768e7",
+      "runtime_sha256": "786a7cee2103008f43d09caa5926c7d54d64ff9937b685768ea7f6550bc4148b",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "src/canonical_data_contract.py": {
+      "source_path": "src/canonical_data_contract.py",
+      "source_blob_sha1": "8f51d6c10ab036f1b0c2e4d7d14db4f86eeffd93",
+      "runtime_sha256": "612aa43b93d3c011931dfd3dda1f376bd1e096666ebd98c6fe871cd67b4f5308",
+      "transformation": "unchanged"
+    },
+    "src/energy/analytical_compute.py": {
+      "source_path": "src/energy/analytical_compute.py",
+      "source_blob_sha1": "0ecc3176e4b781d2c61e1d8447464d515121cc89",
+      "runtime_sha256": "6267b77de3bf858ec116adc8157ae8332e7469aee8c2a66cbeb83660ef375430",
+      "transformation": "unchanged"
+    },
+    "src/energy/frontend_energy_projection.py": {
+      "source_path": "src/energy/decisive_projection.py",
+      "source_blob_sha1": "018927d242913c4bc9f018c8b2d0e7fbe6e53e81",
+      "runtime_sha256": "4f4885bca2906937f25c72f8fc074a6a553f46e56f8e8072a63a000b1eeed8f7",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "src/energy/frontend_memory.py": {
+      "source_path": "src/energy/frontend_memory.py",
+      "source_blob_sha1": "1e68dfdaeaebc660f3900b59845cbd0b5724f419",
+      "runtime_sha256": "c9df23c85f09bf84130200d2a44e35c6e988e3de41ff248bf24272f6b6c4dc14",
+      "transformation": "unchanged"
+    },
+    "src/energy/scalable_patch_projection.py": {
+      "source_path": "src/energy/scalable_patch_projection.py",
+      "source_blob_sha1": "97954863f5ff251d974af1875e31b6f4bf56fef1",
+      "runtime_sha256": "4f8a34023eabd5c4bf1c6d66a22cb58bcf629e08d427d3225c0f8faeb62f24cd",
+      "transformation": "public_import_target"
+    },
+    "src/energy/wta_event_energy_projection.py": {
+      "source_path": "src/energy/scalable_patch_projection_r4.py",
+      "source_blob_sha1": "761ed7d457c7dc8727d34accd921f49366a8f660",
+      "runtime_sha256": "57e9063dd9670b397e71432d7076d042089ec6d22bfc9344745033bf0453fad6",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "src/models/audited_ttfs_patch_decoder.py": {
+      "source_path": "src/models/spike_native_patch_lm_v7.py",
+      "source_blob_sha1": "78bcd7598e940517ee5fc22837c2e33d00a037c5",
+      "runtime_sha256": "73b147c1f12d9928f997e756a4e1952e11e2fd08c87f446fb81e64e1e1f6fae9",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "src/models/continuous_wta_ttfs_decoder.py": {
+      "source_path": "src/models/spike_native_patch_lm_v8.py",
+      "source_blob_sha1": "a1556de70f6700f3eacaa8d4ee5ca4d897484a8f",
+      "runtime_sha256": "846e079ecb07b2c6fcf45828961ecb07482c22042fa6be51668a29aa1273290c",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "src/models/event_accounted_wta_ttfs_decoder.py": {
+      "source_path": "src/models/spike_native_patch_lm_v9.py",
+      "source_blob_sha1": "fa0d0589a255705254932a978ed872e2f630b27e",
+      "runtime_sha256": "294eb766962d1974f07702fbf672d55dc9cd1d64f52e4b9429e16d146e5a4c24",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "src/models/hierarchical_ttfs_patch_decoder.py": {
+      "source_path": "src/models/spike_native_patch_lm_v5.py",
+      "source_blob_sha1": "380ab484f2efcfa8177536d67eeef9539ac5cf58",
+      "runtime_sha256": "035fde34cc37d8eb0b3dd9b802705280e27ba574e486cfc99c5737db9dccb1c6",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "src/models/local_spiking_patch_decoder.py": {
+      "source_path": "src/models/spike_native_patch_lm_v2.py",
+      "source_blob_sha1": "4fdd0aa4b68f102708889a9089b8765aa4e564a7",
+      "runtime_sha256": "56875f3c74c521aabfa1b698598d6be1c960660c448c962cf1410d0f81b3b0fd",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "src/models/spike_count_patch_decoder.py": {
+      "source_path": "src/models/spike_native_patch_lm_v3.py",
+      "source_blob_sha1": "6cec3f456a107f73468571021fa70bdf33443853",
+      "runtime_sha256": "3ea753e8c9eee7e000ff24e068b17eb85964417089e21bdd555cef39e7b7d0fb",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "src/models/spike_input_interfaces.py": {
+      "source_path": "src/models/spike_input_interfaces.py",
+      "source_blob_sha1": "41eb92706aa45477c9beb53cf8eda982c66bf234",
+      "runtime_sha256": "188191ca2ff5305ec788614be18ef628db9135c127775f9f43e412107ab7e54d",
+      "transformation": "unchanged"
+    },
+    "src/models/spike_native_patch_lm.py": {
+      "source_path": "src/models/spike_native_patch_lm.py",
+      "source_blob_sha1": "51d83f7c27705069c07c97f642c2c0d07f14bfaf",
+      "runtime_sha256": "430d9a7e23bdb3bfb5f57af2eb8ec25a3e22d56af0dc8ac22ca3a0103edecc1e",
+      "transformation": "unchanged"
+    },
+    "src/models/spikegpt_operation_accounting.py": {
+      "source_path": "src/models/spikegpt_operation_accounting.py",
+      "source_blob_sha1": "6cccb4ff938e45b254de0032ae10935294d16097",
+      "runtime_sha256": "9ba52ce513b48c75b574b641ec24bd239b69495043d7c57b4af07f3be90dce06",
+      "transformation": "unchanged"
+    },
+    "src/models/spikegpt_reference.py": {
+      "source_path": "src/models/spikegpt_reference.py",
+      "source_blob_sha1": "98bf7c02ff26044d54ccd7c38263df8b3a5784ac",
+      "runtime_sha256": "41f9040f9e557141e42c20e2012f23e1d09040edd7723deba37e0cf694fcae8c",
+      "transformation": "unchanged"
+    },
+    "src/models/spiking_lm_models.py": {
+      "source_path": "src/models/spiking_lm_models.py",
+      "source_blob_sha1": "e78136ec4227f4d1fe0911845241beee5e8855b1",
+      "runtime_sha256": "ddfc7fc030aae96776159b7e25774ecc1ebd901dd38017f398e4face18e15feb",
+      "transformation": "portability_guidance"
+    },
+    "src/models/srwkv_operation_accounting.py": {
+      "source_path": "src/models/srwkv_operation_accounting.py",
+      "source_blob_sha1": "84a911e4e893b950e0bb16c989e4fcaf20aa7cc0",
+      "runtime_sha256": "25da220c407f7c9e1142307f97accdc89f588406b0adfe2637c444af01420835",
+      "transformation": "unchanged"
+    },
+    "src/models/strict_spiking_backbones.py": {
+      "source_path": "src/models/strict_spiking_backbones_v2.py",
+      "source_blob_sha1": "8c0bee89666adb8c8fd6e4a427087af20cf71647",
+      "runtime_sha256": "3892ac4adc77c6cdd89df673f0a9babaa4ef78fe00fddc691e0b7bf13fc42535",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "src/models/strict_ttfs_patch_decoder.py": {
+      "source_path": "src/models/spike_native_patch_lm_v6.py",
+      "source_blob_sha1": "b093d236db2543132b8e07ca2b8e4cb98170fc42",
+      "runtime_sha256": "911f7e03a88b017981b9104dddf5124718c7a1ebad6a971a772164a776cb5f7e",
+      "transformation": "semantic_path_and_public_identifiers"
+    },
+    "src/tokenizers/blt_patcher.py": {
+      "source_path": "src/tokenizers/blt_patcher.py",
+      "source_blob_sha1": "2227b8b1600f48540c7d75f39f6c44a87905828d",
+      "runtime_sha256": "e2b37313bd089c701522bc94ce3412fa4f1e82c7b8810e37049db22f0e1ae19e",
+      "transformation": "unchanged"
+    },
+    "src/tokenizers/gpt_neox_20b.py": {
+      "source_path": "src/tokenizers/gpt_neox_20b.py",
+      "source_blob_sha1": "aba05db1d1ac4076c65efecd2e8120caa98dbd8e",
+      "runtime_sha256": "f645da880696df4e31ca5d54c1dd5effd0df7851e32859bb6b2e7ce1259248bb",
+      "transformation": "unchanged"
+    },
+    "src/tokenizers/lossless_codecs.py": {
+      "source_path": "src/tokenizers/lossless_codecs.py",
+      "source_blob_sha1": "af4a739dce115dd1d88548896fe202daa7e87f45",
+      "runtime_sha256": "bcc7bf89c59bce20d75d1e8fd4e82e1552c7024c1ce36d9696d7611f053866a1",
+      "transformation": "unchanged"
+    },
+    "src/tokenizers/spike_boundary_native_levels.py": {
+      "source_path": "src/tokenizers/spike_boundary_native_levels.py",
+      "source_blob_sha1": "06a0a2ae6f99e953d9a117ed7b23aaf2a74d0e47",
+      "runtime_sha256": "63e27a597c32841a0b2b5bcd308b3d4d4c6a8f4c83d707ea890d0441ffcb8afd",
+      "transformation": "unchanged"
+    },
+    "src/tokenizers/spike_boundary_refined.py": {
+      "source_path": "src/tokenizers/spike_boundary_refined.py",
+      "source_blob_sha1": "6a7f7d52633d60deb8646ecdb6e669dfda8f117d",
+      "runtime_sha256": "6fd905c1b7f8332bb6b82abe998873b4d44bfa7f9721841625ce5dbc896adc54",
+      "transformation": "unchanged"
+    },
+    "src/tokenizers/spike_native_patch_frontends.py": {
+      "source_path": "src/tokenizers/spike_native_patch_frontends.py",
+      "source_blob_sha1": "8d3c2a5eacd81094ae8748d18a8e1189c88355cb",
+      "runtime_sha256": "4b6569c8c4e49479d5771b7c9d497da7c9d432ce14deed62dfb9411e96c65647",
+      "transformation": "unchanged"
+    },
+    "src/tokenizers/spiking_blt_frontend.py": {
+      "source_path": "src/tokenizers/spiking_blt_frontend.py",
+      "source_blob_sha1": "ff56542f68cc988af0d1f7c86f9b4cc85f0a42b6",
+      "runtime_sha256": "80e07e8f5826f9e5686ae5d54afce65b88ff6d9162f6a7a13e6310d4359ebfdd",
+      "transformation": "unchanged"
+    }
   },
-  "portability_patches": [
+  "portability_changes": [
     {
-      "path": "scripts/train_2026_07_17_canonical_lm.py",
-      "change": "Read the canonical data root from SPIKE_TOKENIZER_CANONICAL_ROOT with the original Bunya path as fallback.",
+      "runtime_path": "scripts/audit_frontend_representations.py",
+      "source_path": "scripts/audit_2026_07_16_canonical_frontend_representations.py",
+      "change": "Use project-relative data and tokenizer defaults with environment-variable overrides."
+    },
+    {
+      "runtime_path": "scripts/prepare_canonical_splits.py",
+      "source_path": "scripts/prepare_2026_07_16_canonical_splits.py",
+      "change": "Require source-corpus paths and use a project-relative canonical output default."
+    },
+    {
+      "runtime_path": "scripts/fit_sentencepiece_tokenizer.py",
+      "source_path": "scripts/measure_2026_07_22_sentencepiece_fit.py",
+      "change": "Use a project-relative canonical-data fallback with an environment-variable override.",
+      "original_copy": "provenance/original_source/scripts/measure_2026_07_22_sentencepiece_fit.py"
+    },
+    {
+      "runtime_path": "scripts/train_frontend_language_model.py",
+      "source_path": "scripts/train_2026_07_17_canonical_lm.py",
+      "change": "Use project-relative data and tokenizer defaults with environment-variable overrides.",
       "original_copy": "provenance/original_source/scripts/train_2026_07_17_canonical_lm.py"
     },
     {
-      "path": "scripts/measure_2026_07_22_sentencepiece_fit.py",
-      "change": "Read the canonical data root from SPIKE_TOKENIZER_CANONICAL_ROOT with the original Bunya path as fallback.",
-      "original_copy": "provenance/original_source/scripts/measure_2026_07_22_sentencepiece_fit.py"
+      "runtime_path": "scripts/train_patch_language_model.py",
+      "source_path": "scripts/train_2026_07_23_scalable_patch_lm.py",
+      "change": "Use a project-relative canonical-data fallback with an environment-variable override."
+    },
+    {
+      "runtime_path": "scripts/train_spike_count_decoder.py",
+      "source_path": "scripts/train_2026_07_28_spike_output_decoder_lm.py",
+      "change": "Use a project-relative canonical-data fallback with an environment-variable override."
+    },
+    {
+      "runtime_path": "src/models/spiking_lm_models.py",
+      "source_path": "src/models/spiking_lm_models.py",
+      "change": "Replace a private environment path in the missing-dependency message with public setup guidance."
     }
   ]
 }

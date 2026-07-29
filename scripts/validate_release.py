@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import re
 from pathlib import Path
 
 
@@ -125,27 +126,70 @@ def validate_hashes() -> None:
 def validate_source_manifest() -> None:
     manifest = json.loads((ROOT / "docs/source_manifest.json").read_text())
     patched = {
-        row["path"]: row["original_copy"]
-        for row in manifest["portability_patches"]
+        row["runtime_path"]: row["original_copy"]
+        for row in manifest["portability_changes"]
+        if "original_copy" in row
     }
+    require(
+        manifest["format"] == "paper_code_source_manifest_v2",
+        "unsupported source manifest format",
+    )
     require(len(manifest["files"]) == 38, "source manifest file count differs")
-    for relative, expected_blob in manifest["files"].items():
+    for relative, record in manifest["files"].items():
         runtime = ROOT / "paper_code" / relative
         require(runtime.is_file(), f"paper runtime file is missing: {relative}")
-        identity_path = (
-            ROOT / patched[relative]
-            if relative in patched
-            else runtime
-        )
         require(
-            git_blob_sha1(identity_path) == expected_blob,
-            f"source blob identity differs: {relative}",
+            sha256(runtime) == record["runtime_sha256"],
+            f"public runtime checksum differs: {relative}",
         )
+        require(record["source_path"], f"source path is missing: {relative}")
+        require(
+            re.fullmatch(r"[0-9a-f]{40}", record["source_blob_sha1"]) is not None,
+            f"source blob identity is malformed: {relative}",
+        )
+        if relative in patched:
+            identity_path = ROOT / patched[relative]
+            require(
+                git_blob_sha1(identity_path) == record["source_blob_sha1"],
+                f"portability source blob identity differs: {relative}",
+            )
+        elif record["transformation"] == "unchanged":
+            require(
+                git_blob_sha1(runtime) == record["source_blob_sha1"],
+                f"unchanged source blob identity differs: {relative}",
+            )
+
+
+def validate_environment_evidence() -> None:
+    evidence = json.loads((ROOT / "docs/bunya_environment.json").read_text())
+    require(
+        evidence["evidence_commit"]
+        == "714d90b7f62e637c6f4682ded1ed55a2ab796fc5",
+        "Bunya environment evidence commit differs",
+    )
+    require(
+        evidence["captured_imports"]
+        == {
+            "numpy": "2.2.6",
+            "sentencepiece": "0.2.1",
+            "snntorch": "0.9.4",
+            "torch": "2.11.0+cu126",
+        },
+        "captured import versions differ",
+    )
+    lock = (ROOT / "environment-lock.yml").read_text()
+    require("/scratch/" not in lock, "archival environment contains a local path")
+    require("snntorch==0.9.4" in lock, "archival environment omits snnTorch")
+    require(
+        "torch==2.11.0+cu126" in lock,
+        "archival environment does not preserve the captured Torch build",
+    )
 
 
 def main() -> None:
     validate_hashes()
     validate_source_manifest()
+    validate_environment_evidence()
     validate_front_end()
     validate_temporal_decoders()
     print("PASS: release grids, raw archives, audits, and hashes are consistent")

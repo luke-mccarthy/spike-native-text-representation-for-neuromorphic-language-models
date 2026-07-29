@@ -1,4 +1,4 @@
-"""Corrected strict-TTFS model ledger for the r2 calibration workflow.
+"""Audited strict-TTFS model ledger for the calibration workflow.
 
 The v6 neural dynamics are retained unchanged.  This additive wrapper corrects
 only the operation-ledger fields required by the scalable patch projection:
@@ -13,19 +13,19 @@ from typing import Dict, Tuple
 import torch
 from torch import nn
 
-from src.models.spike_native_patch_lm_v2 import LocalByteLIFDecoderV2
-from src.models.spike_native_patch_lm_v6 import (
+from src.models.local_spiking_patch_decoder import LocalByteLIFDecoder
+from src.models.strict_ttfs_patch_decoder import (
     OUTPUT_HEADS,
     PATCH_ARCHITECTURES,
     LocalByteLIFDecoderStrictTTFS,
-    SpikeNativePatchLanguageModelV6,
+    StrictTTFSPatchLanguageModel,
 )
 
 
 PATCH_LEDGER_V7_VERSION = "codec_free_patch_v7_strict_ttfs_corrected_ledger"
 
 
-class LocalByteLIFDecoderStrictTTFSV7(LocalByteLIFDecoderStrictTTFS):
+class AuditedTTFSPatchDecoder(LocalByteLIFDecoderStrictTTFS):
     """v6 strict decoder with complete likelihood-operation accounting."""
 
     def forward(
@@ -50,7 +50,7 @@ class LocalByteLIFDecoderStrictTTFSV7(LocalByteLIFDecoderStrictTTFS):
         return scores
 
 
-class SpikeNativePatchLanguageModelV7(SpikeNativePatchLanguageModelV6):
+class AuditedTTFSPatchLanguageModel(StrictTTFSPatchLanguageModel):
     """v6 neural model with the corrected strict decoder ledger."""
 
     def __init__(
@@ -92,10 +92,10 @@ class SpikeNativePatchLanguageModelV7(SpikeNativePatchLanguageModelV6):
             seed=seed,
         )
         if output_head == "dense_reference":
-            if not isinstance(self.decoder, LocalByteLIFDecoderV2):
+            if not isinstance(self.decoder, LocalByteLIFDecoder):
                 raise AssertionError("dense reference decoder construction changed")
         else:
-            self.decoder = LocalByteLIFDecoderStrictTTFSV7(
+            self.decoder = AuditedTTFSPatchDecoder(
                 context_dim=hidden_dim,
                 max_patch_bytes=max_patch_bytes,
                 output_head=output_head,
@@ -136,6 +136,6 @@ __all__ = [
     "OUTPUT_HEADS",
     "PATCH_ARCHITECTURES",
     "PATCH_LEDGER_V7_VERSION",
-    "LocalByteLIFDecoderStrictTTFSV7",
-    "SpikeNativePatchLanguageModelV7",
+    "AuditedTTFSPatchDecoder",
+    "AuditedTTFSPatchLanguageModel",
 ]

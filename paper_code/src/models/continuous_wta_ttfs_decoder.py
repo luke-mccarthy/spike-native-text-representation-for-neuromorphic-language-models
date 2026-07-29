@@ -17,9 +17,9 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-from src.models.spike_native_patch_lm_v2 import LocalByteLIFDecoderV2, _LIFDecoderLayer
-from src.models.spike_native_patch_lm_v6 import OUTPUT_HEADS, PATCH_ARCHITECTURES
-from src.models.spike_native_patch_lm_v7 import SpikeNativePatchLanguageModelV7
+from src.models.local_spiking_patch_decoder import LocalByteLIFDecoder, _LIFDecoderLayer
+from src.models.strict_ttfs_patch_decoder import OUTPUT_HEADS, PATCH_ARCHITECTURES
+from src.models.audited_ttfs_patch_decoder import AuditedTTFSPatchLanguageModel
 from src.models.spikegpt_reference import atan_spike
 from src.tokenizers.spiking_blt_frontend import injective_byte_spike_codebook
 
@@ -609,7 +609,7 @@ class LocalByteLIFDecoderContinuousTTFS(nn.Module):
         return dict(self._last_stats)
 
 
-class SpikeNativePatchLanguageModelV8(SpikeNativePatchLanguageModelV7):
+class ContinuousWTATTFSPatchLanguageModel(AuditedTTFSPatchLanguageModel):
     """v7 patch/backbone path with continuous-time WTA TTFS output heads."""
 
     def __init__(self, *, output_head: str, **kwargs: object) -> None:
@@ -661,5 +661,5 @@ __all__ = [
     "DirectRaceToFirstSpikeByteHead",
     "NibbleRaceToFirstSpikeByteHead",
     "LocalByteLIFDecoderContinuousTTFS",
-    "SpikeNativePatchLanguageModelV8",
+    "ContinuousWTATTFSPatchLanguageModel",
 ]

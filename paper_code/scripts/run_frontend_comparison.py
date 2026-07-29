@@ -61,7 +61,7 @@ def main() -> None:
     if row["runner_kind"] == "decisive":
         command = [
             sys.executable,
-            "scripts/run_2026_07_22_decisive_frontend_row.py",
+            "scripts/run_frontend_row.py",
             "--grid", str(args.grid),
             "--task-id", str(args.task_id),
             "--parts-root", str(args.parts_root),
@@ -71,7 +71,7 @@ def main() -> None:
     elif row["runner_kind"] == "patch":
         command = [
             sys.executable,
-            "scripts/train_2026_07_23_scalable_patch_lm.py",
+            "scripts/train_patch_language_model.py",
             "--dataset", row["dataset"],
             "--data-tier", row["data_tier"],
             "--architecture", row["patch_architecture"],

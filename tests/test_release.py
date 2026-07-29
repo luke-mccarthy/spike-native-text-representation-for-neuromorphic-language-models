@@ -1,4 +1,5 @@
 from scripts.validate_release import (
+    validate_environment_evidence,
     validate_front_end,
     validate_hashes,
     validate_source_manifest,
@@ -8,6 +9,10 @@ from scripts.validate_release import (
 
 def test_archived_hashes() -> None:
     validate_hashes()
+
+
+def test_environment_evidence() -> None:
+    validate_environment_evidence()
 
 
 def test_front_end_archive() -> None:

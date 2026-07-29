@@ -16,6 +16,7 @@ import gc
 import hashlib
 import json
 import math
+import os
 import statistics
 import sys
 import time
@@ -46,9 +47,17 @@ from src.tokenizers.spike_boundary_native_levels import (
 
 PROTOCOL_ID = "canonical_frontend_protocol_2026_07_16_v1"
 CANONICAL_ROOT = Path(
-    "/scratch/user/lukemccarthy/datasets/spike_tokenizer_canonical_2026_07_16"
+    os.environ.get(
+        "SPIKE_TOKENIZER_CANONICAL_ROOT",
+        str(ROOT.parent / "data/canonical"),
+    )
 )
-TOKENIZER_ROOT = ROOT / "tokenizers/2026_07_16_canonical"
+TOKENIZER_ROOT = Path(
+    os.environ.get(
+        "SPIKE_TOKENIZER_FIT_ROOT",
+        str(ROOT.parent / "tokenizers/fitted"),
+    )
+)
 TARGET_RATES = (0.075, 0.100, 0.125)
 TARGET_PATCH_VOCAB = 8192
 SPIKE_DIMENSION = 32
@@ -173,7 +182,7 @@ def verify_tokenizer_gate() -> Mapping[str, object]:
     summary_path = TOKENIZER_ROOT / "audit_summary.json"
     if not summary_path.is_file():
         raise FileNotFoundError(
-            f"Missing {summary_path}; run aggregate_2026_07_16_canonical_tokenizer_audits.py first"
+            f"Missing {summary_path}; build the tokenizer audit summary first"
         )
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     required = (

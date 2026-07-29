@@ -1,0 +1,33 @@
+{
+  "format": "bunya_environment_evidence_v1",
+  "evidence_repository": "luke-mccarthy/spike-tokenizer-snn",
+  "evidence_commit": "714d90b7f62e637c6f4682ded1ed55a2ab796fc5",
+  "evidence_path": "docs/experiment_records/2026_07_29_bunya_environment_capture",
+  "experiment_source_revision": "e0e4b66faf8f47e19a62cbc43ee98e8066665418",
+  "captured_imports": {
+    "numpy": "2.2.6",
+    "sentencepiece": "0.2.1",
+    "snntorch": "0.9.4",
+    "torch": "2.11.0+cu126"
+  },
+  "captured_distributions": {
+    "pip": "26.1.1",
+    "pytest": null,
+    "setuptools": "70.2.0"
+  },
+  "runtime": {
+    "python": "3.10.20",
+    "platform": "Linux",
+    "glibc": "2.34",
+    "torch_cuda_build": "12.6",
+    "torch_cudnn_build": "9.10.2",
+    "torch_cuda_available_on_capture_node": false
+  },
+  "evidence_sha256": {
+    "environment-full.yml": "6c749d78a2c5bf2ce14435f760da9eaf124494b951ce4eef94735dc762612b66",
+    "imported-versions.json": "455481bc181770de021929172c466a822bc9013a0a101bf1a0fc3cec595a01b2",
+    "pip-check.txt": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+    "runtime.txt": "1133087923a9ab1ecee99c2b0c2ad0805d4e18f9488e5e6600cca4ce3dbbc178",
+    "torch-build-config.txt": "f457ae4d1f02d01dd4379192be1956700c59c2a6a7630fea8ba3da9150b2850b"
+  }
+}

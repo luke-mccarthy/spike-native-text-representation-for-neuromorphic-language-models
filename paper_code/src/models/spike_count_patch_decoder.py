@@ -2,7 +2,7 @@
 
 This additive v3 module leaves the audited v1/v2 implementations untouched.
 The patch encoder and SpikeGPT reference backbone are unchanged. The dense
-reference path reuses ``LocalByteLIFDecoderV2`` exactly. The spike-output path
+reference path reuses ``LocalByteLIFDecoder`` exactly. The spike-output path
 reuses the same recurrent LIF decoder layers and replaces only the terminal
 real-valued 256-way readout with 256 LIF output neurons whose spike counts are
 used as training/evaluation scores and whose emitted events identify bytes at
@@ -19,9 +19,9 @@ from torch import nn
 
 from src.models.spikegpt_reference import SpikeGPTReferenceLM, atan_spike
 from src.models.spike_native_patch_lm import PositionalPatchSpikeEncoder
-from src.models.spike_native_patch_lm_v2 import (
+from src.models.local_spiking_patch_decoder import (
     PATCH_ARCHITECTURES,
-    LocalByteLIFDecoderV2,
+    LocalByteLIFDecoder,
     _LIFDecoderLayer,
 )
 from src.tokenizers.spiking_blt_frontend import injective_byte_spike_codebook
@@ -293,7 +293,7 @@ class LocalByteLIFDecoderSpikeOutput(nn.Module):
         return dict(self._last_stats)
 
 
-class SpikeNativePatchLanguageModelV3(nn.Module):
+class SpikeCountPatchLanguageModel(nn.Module):
     """Unchanged patch encoder/backbone with selectable terminal byte head."""
 
     def __init__(
@@ -336,7 +336,7 @@ class SpikeNativePatchLanguageModelV3(nn.Module):
             seed=seed,
         )
         if output_head == "dense_reference":
-            self.decoder: nn.Module = LocalByteLIFDecoderV2(**decoder_kwargs)
+            self.decoder: nn.Module = LocalByteLIFDecoder(**decoder_kwargs)
         else:
             self.decoder = LocalByteLIFDecoderSpikeOutput(
                 **decoder_kwargs,
@@ -397,5 +397,5 @@ __all__ = [
     "PATCH_LEDGER_V3_VERSION",
     "LocalByteLIFDecoderSpikeOutput",
     "SpikeCountByteOutputHead",
-    "SpikeNativePatchLanguageModelV3",
+    "SpikeCountPatchLanguageModel",
 ]

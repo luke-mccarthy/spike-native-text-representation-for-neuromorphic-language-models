@@ -24,7 +24,7 @@ try:
 except ImportError as exc:
     raise ImportError(
         "snntorch is required for spiking_lm_models.py. "
-        "Activate /scratch/user/lukemccarthy/conda-envs/spikegpt-gpu-env."
+        "Install the pinned dependency or create environment.yml."
     ) from exc
 
 

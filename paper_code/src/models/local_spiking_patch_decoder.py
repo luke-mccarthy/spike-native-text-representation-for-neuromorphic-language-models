@@ -8,7 +8,7 @@ along the first two of three directions identified from the audited
 1. The local byte decoder previously shared its hidden dimension and depth
    (one LIF layer) with the shared global backbone, despite doing genuinely
    new autoregressive work -- predicting up to eight bytes per patch -- that
-   the original SpikeGPT readout never performed. ``LocalByteLIFDecoderV2``
+   the original SpikeGPT readout never performed. ``LocalByteLIFDecoder``
    decouples ``decoder_hidden_dim`` and ``decoder_num_layers`` from the
    global backbone entirely.
 2. Training-time knowledge distillation from a frozen, fully spiking
@@ -125,7 +125,7 @@ class _LIFDecoderLayer(nn.Module):
         )
 
 
-class LocalByteLIFDecoderV2(nn.Module):
+class LocalByteLIFDecoder(nn.Module):
     """Autoregressive local byte decoder with a decoupled capacity budget.
 
     Structurally identical in spirit to
@@ -279,7 +279,7 @@ class LocalByteLIFDecoderV2(nn.Module):
         return dict(self._last_stats)
 
 
-class SpikeNativePatchLanguageModelV2(nn.Module):
+class LocalDecoderPatchLanguageModel(nn.Module):
     """Unchanged global SpikeGPT blocks plus a capacity-decoupled local decoder."""
 
     def __init__(
@@ -303,7 +303,7 @@ class SpikeNativePatchLanguageModelV2(nn.Module):
         )
         self.backbone.final_ln = nn.Identity()
         self.backbone.readout = nn.Identity()
-        self.decoder = LocalByteLIFDecoderV2(
+        self.decoder = LocalByteLIFDecoder(
             context_dim=hidden_dim,
             max_patch_bytes=max_patch_bytes,
             decoder_hidden_dim=decoder_hidden_dim,
@@ -344,8 +344,8 @@ __all__ = [
     "PATCH_ARCHITECTURES",
     "PATCH_LEDGER_V2_VERSION",
     "PatchSequence",
-    "LocalByteLIFDecoderV2",
-    "SpikeNativePatchLanguageModelV2",
+    "LocalByteLIFDecoder",
+    "LocalDecoderPatchLanguageModel",
     "complete_patch_blocks",
     "fixed_width_patches",
     "merge_additive_stats",

@@ -11,18 +11,29 @@ experimental repository `luke-mccarthy/spike-tokenizer-snn`.
 | Front-end raw test archive | `1c126ff45c504736c41800d5184de110306b0218` |
 | Temporal-decoder runtime code | `e20afbd166099210cca18be089e6aae447f6e56a` |
 | Temporal-decoder publication archive | `e0e4b66faf8f47e19a62cbc43ee98e8066665418` |
+| Bunya environment evidence | `714d90b7f62e637c6f4682ded1ed55a2ab796fc5` |
 
 The front-end files required at the earlier source commit have the same Git
 blob identities at the temporal-decoder commit. The artifact therefore uses
 one deduplicated `paper_code/` tree, with the later decoder-only files added.
-The original file names are retained only for source identity and import
-compatibility. The public entry point is `reproduce.py`.
+The public runtime uses descriptive filenames and identifiers. Original
+development paths and exact Git blob identities are retained in
+`source_manifest.json`, with a human-readable summary in `SOURCE_MAPPING.md`.
+The public entry point is `reproduce.py`.
 
-Two files use a single portability-only change in the front-end runtime
-snapshot: their Bunya-specific canonical-data path is read from
-`SPIKE_TOKENIZER_CANONICAL_ROOT`. Their unmodified source versions are retained
-under `provenance/original_source/`. No model, training, metric, split, or
-accounting operation was changed.
+Public entry scripts use project-relative defaults and
+`SPIKE_TOKENIZER_CANONICAL_ROOT`/`SPIKE_TOKENIZER_FIT_ROOT` overrides instead
+of private Bunya paths. Source-corpus paths are explicit command-line
+arguments. The exact portability changes are enumerated in
+`source_manifest.json`; unmodified copies of the two initially patched sources
+are retained under `provenance/original_source/`. No model, training, metric,
+split, or accounting operation was changed.
+
+The software evidence was captured from the original Bunya Conda environment
+at development commit `e0e4b66faf8f47e19a62cbc43ee98e8066665418`. The
+sanitised full export is `environment-lock.yml`; exact evidence checksums and
+the development-repository location are recorded in
+`docs/bunya_environment.json`.
 
 ## Included raw archives
 

@@ -23,9 +23,9 @@ from torch import nn
 
 from src.models.spikegpt_reference import SpikeGPTReferenceLM, atan_spike
 from src.models.spike_native_patch_lm import PositionalPatchSpikeEncoder
-from src.models.spike_native_patch_lm_v2 import (
+from src.models.local_spiking_patch_decoder import (
     PATCH_ARCHITECTURES,
-    LocalByteLIFDecoderV2,
+    LocalByteLIFDecoder,
     _LIFDecoderLayer,
 )
 from src.tokenizers.spiking_blt_frontend import injective_byte_spike_codebook
@@ -552,7 +552,7 @@ class LocalByteLIFDecoderFirstSpikeOutput(nn.Module):
         return dict(self._last_stats)
 
 
-class SpikeNativePatchLanguageModelV5(nn.Module):
+class HierarchicalTTFSPatchLanguageModel(nn.Module):
     """Unchanged patch encoder/backbone with dense or strict TTFS output."""
 
     def __init__(
@@ -601,7 +601,7 @@ class SpikeNativePatchLanguageModelV5(nn.Module):
             seed=seed,
         )
         if output_head == "dense_reference":
-            self.decoder: nn.Module = LocalByteLIFDecoderV2(**decoder_kwargs)
+            self.decoder: nn.Module = LocalByteLIFDecoder(**decoder_kwargs)
         else:
             self.decoder = LocalByteLIFDecoderFirstSpikeOutput(
                 **decoder_kwargs,
@@ -673,5 +673,5 @@ __all__ = [
     "FirstSpikeNibblePopulation",
     "HierarchicalFirstSpikeByteHead",
     "LocalByteLIFDecoderFirstSpikeOutput",
-    "SpikeNativePatchLanguageModelV5",
+    "HierarchicalTTFSPatchLanguageModel",
 ]

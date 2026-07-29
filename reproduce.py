@@ -33,7 +33,7 @@ def front_end_command(args: argparse.Namespace) -> list[str]:
         sys.executable,
         str(
             PAPER_CODE_ROOT
-            / "scripts/run_2026_07_23_scalable_patch_frontend_row.py"
+            / "scripts/run_frontend_comparison.py"
         ),
         "--grid",
         str(grid),
@@ -59,7 +59,7 @@ def temporal_decoder_command(args: argparse.Namespace) -> list[str]:
         sys.executable,
         str(
             PAPER_CODE_ROOT
-            / "scripts/train_2026_07_28_strict_ttfs_output_lm_r4.py"
+            / "scripts/run_temporal_decoder_comparison.py"
         ),
         "--dataset", row["dataset"],
         "--data-tier", row["data_tier"],
@@ -160,7 +160,7 @@ def main() -> None:
             sys.executable,
             str(
                 PAPER_CODE_ROOT
-                / "scripts/prepare_2026_07_16_canonical_splits.py"
+                / "scripts/prepare_canonical_splits.py"
             ),
             "--text8-full", str(args.text8_full),
             "--tinystories-5000", str(args.tinystories_5000),
@@ -186,7 +186,7 @@ def main() -> None:
             sys.executable,
             str(
                 PAPER_CODE_ROOT
-                / "scripts/measure_2026_07_22_sentencepiece_fit.py"
+                / "scripts/fit_sentencepiece_tokenizer.py"
             ),
             "--grid", str(grid),
             "--task-id", str(args.row),

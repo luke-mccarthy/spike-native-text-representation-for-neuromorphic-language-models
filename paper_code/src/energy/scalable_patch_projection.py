@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Dict, Mapping
 
-from src.energy.decisive_projection import HOROWITZ_FP32_MAC_PJ, SCENARIOS
+from src.energy.frontend_energy_projection import HOROWITZ_FP32_MAC_PJ, SCENARIOS
 
 
 PATCH_PROJECTION_VERSION = "scalable_patch_projection_v1"

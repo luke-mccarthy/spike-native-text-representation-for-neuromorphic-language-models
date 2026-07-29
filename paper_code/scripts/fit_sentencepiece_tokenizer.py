@@ -20,7 +20,7 @@ if str(ROOT) not in sys.path:
 
 import sentencepiece as spm
 
-from scripts.make_2026_07_22_decisive_frontend_grids import read_fit_grid_row
+from scripts.build_frontend_grids import read_fit_grid_row
 from src.canonical_data_contract import (
     assert_training_only_contract,
     canonical_training_relative_path,
@@ -30,7 +30,7 @@ from src.canonical_data_contract import (
 CANONICAL_ROOT = Path(
     os.environ.get(
         "SPIKE_TOKENIZER_CANONICAL_ROOT",
-        "/scratch/user/lukemccarthy/datasets/spike_tokenizer_canonical_2026_07_16",
+        str(ROOT.parent / "data/canonical"),
     )
 )
 SPECS = {

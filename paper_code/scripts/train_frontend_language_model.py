@@ -26,7 +26,7 @@ import sentencepiece as spm
 import torch
 import torch.nn.functional as F
 
-from scripts.audit_2026_07_16_canonical_frontend_representations import (
+from scripts.audit_frontend_representations import (
     calibrate_lif_threshold,
     fitted_state_digest,
 )
@@ -62,7 +62,7 @@ from src.models.srwkv_operation_accounting import (
     srwkv_v2_operation_ledger,
     training_operation_estimates,
 )
-from src.models.strict_spiking_backbones_v2 import build_strict_spike_rwkv_v2_lm
+from src.models.strict_spiking_backbones import build_strict_spike_rwkv_lm
 from src.tokenizers.blt_patcher import BLTPatcherConfig, BLTPatchVocabProxy
 from src.tokenizers.lossless_codecs import LosslessPatchCodec
 from src.tokenizers.gpt_neox_20b import (
@@ -84,10 +84,15 @@ PROTOCOL_ID = "canonical_frontend_protocol_2026_07_16_v1"
 CANONICAL_ROOT = Path(
     os.environ.get(
         "SPIKE_TOKENIZER_CANONICAL_ROOT",
-        "/scratch/user/lukemccarthy/datasets/spike_tokenizer_canonical_2026_07_16",
+        str(ROOT.parent / "data/canonical"),
     )
 )
-TOKENIZER_ROOT = ROOT / "tokenizers/2026_07_16_canonical"
+TOKENIZER_ROOT = Path(
+    os.environ.get(
+        "SPIKE_TOKENIZER_FIT_ROOT",
+        str(ROOT.parent / "tokenizers/fitted"),
+    )
+)
 OFFICIAL_SPIKEGPT_TOKENIZER_PATH = (
     ROOT / "assets/tokenizers/spikegpt_20B_tokenizer.json"
 )
@@ -1025,7 +1030,7 @@ def build_sequences(
 
 def build_backbone(args, vocab_size: int, input_dim: int = 32):
     if args.backbone == "strict_spike_rwkv_v2":
-        return build_strict_spike_rwkv_v2_lm(
+        return build_strict_spike_rwkv_lm(
             vocab_size=vocab_size,
             input_dim=32,
             hidden_dim=args.hidden_dim,

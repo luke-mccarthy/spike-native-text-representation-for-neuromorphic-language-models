@@ -9,13 +9,15 @@ system. The experiment code explicitly:
   factorial;
 - used seeds 1, 2, and 3 as declared in the frozen grids.
 
-The temporal-decoder row ledgers record:
+The row ledgers and the post-experiment Bunya environment capture record:
 
 | Component | Recorded value |
 |---|---|
 | Python | 3.10.20 |
 | NumPy | 2.2.6 |
 | PyTorch | 2.11.0+cu126 |
+| SentencePiece | 0.2.1 |
+| snnTorch | 0.9.4 |
 | Torch threads | 1 |
 | OpenMP threads | 1 |
 | MKL threads | 1 |
@@ -25,10 +27,18 @@ reference implementations executed on CPU. `environment.yml` pins the
 cross-platform package versions needed by the code; a CUDA build is not
 required for the recorded CPU execution path.
 
-The archived environment export omitted the version of `snntorch` even though
-one imported compatibility module requires it at import time. The portable
-environment pins `snntorch==0.9.4`; this is an explicit packaging repair, not a
-claim that the omitted original version was recoverable from the run ledgers.
+The environment was captured from the original Bunya Conda environment after
+the reported experiments. Direct imports confirmed NumPy 2.2.6,
+SentencePiece 0.2.1, snnTorch 0.9.4, and PyTorch 2.11.0+cu126. `pip check`
+reported no broken requirements. Pytest was not installed in the experimental
+environment; it is available only through the optional `test` dependency in
+`pyproject.toml`.
+
+`environment-lock.yml` is a sanitised, path-independent copy of the full
+Linux-64 Bunya export. It retains Conda build strings and CUDA package pins, so
+it is archival rather than cross-platform. Use `environment.yml` for a compact
+portable setup. The exact evidence location, source revision, and checksums are
+recorded in `bunya_environment.json`.
 
 The archived records do not identify a CPU microarchitecture, so this
 repository does not claim one. Wall-clock and process-time fields can vary by

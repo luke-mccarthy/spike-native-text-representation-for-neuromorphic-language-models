@@ -1,10 +1,10 @@
-"""r4 extension of the scalable patch projection for routed WTA events."""
+"""Scalable patch projection extended with routed WTA events."""
 
 from __future__ import annotations
 
 from typing import Dict, Mapping
 
-from src.energy.decisive_projection import SCENARIOS
+from src.energy.frontend_energy_projection import SCENARIOS
 from src.energy.scalable_patch_projection import scalable_patch_projection as base_projection
 
 
@@ -14,11 +14,11 @@ def _optional(row: Mapping[str, object], key: str) -> float:
         return 0.0
     result = float(value)
     if result < 0.0:
-        raise ValueError(f"negative optional r4 ledger field: {key}")
+        raise ValueError(f"negative optional WTA ledger field: {key}")
     return result
 
 
-def scalable_patch_projection_r4(
+def wta_event_energy_projection(
     row: Mapping[str, object],
 ) -> Dict[str, float | int | str]:
     """Add emitted class and inhibitory-latch packet energy to the base ledger."""
@@ -72,4 +72,4 @@ def scalable_patch_projection_r4(
     return result
 
 
-__all__ = ["scalable_patch_projection_r4"]
+__all__ = ["wta_event_energy_projection"]

@@ -25,7 +25,7 @@ results/
   front_end/              Raw 90-row front-end comparison
   temporal_decoders/      Raw 162-row decoder factorial
 scripts/                  Release-integrity utilities
-paper_code/               Commit-pinned paper runtime snapshots
+paper_code/               Curated paper runtime with descriptive public names
 provenance/               Unmodified originals of portability-patched files
 tests/                    Release-integrity tests
 environment.yml           Portable pinned runtime environment
@@ -105,14 +105,17 @@ The original runs used one CPU thread per task.
 ## Reproducibility boundary
 
 The experiments were executed on the Bunya HPC system with Python 3.10.20,
-NumPy 2.2.6, and PyTorch 2.11.0. The run ledgers for the temporal-decoder study
-record PyTorch `2.11.0+cu126`; the models themselves were explicitly executed
-on CPU with one Torch, OpenMP, and MKL thread per task. The portable environment
-is in `environment.yml`; the fuller archived export is retained in
+NumPy 2.2.6, SentencePiece 0.2.1, snnTorch 0.9.4, and PyTorch
+2.11.0+cu126. The models themselves were explicitly executed on CPU with one
+Torch, OpenMP, and MKL thread per task. The compact portable environment is in
+`environment.yml`; the path-sanitised Linux-64 Bunya export is retained in
 `environment-lock.yml`.
 
-The source commits, result commits, expected row counts, and archived hashes
-are listed in [docs/PROVENANCE.md](docs/PROVENANCE.md). The integrity validator
+The source commits, result commits, environment evidence, expected row counts,
+and archived hashes are listed in
+[docs/PROVENANCE.md](docs/PROVENANCE.md). Descriptive public filenames are
+mapped to their original development paths in
+[docs/SOURCE_MAPPING.md](docs/SOURCE_MAPPING.md). The integrity validator
 checks those declarations without calculating or interpreting paper findings.
 
 ## Access and contributions

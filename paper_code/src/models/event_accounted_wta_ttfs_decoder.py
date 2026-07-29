@@ -1,6 +1,6 @@
-"""Corrected event emission and feedback accounting for the r4 WTA workflow.
+"""Event emission and feedback accounting for the continuous WTA workflow.
 
-The continuous race dynamics and latency likelihoods are unchanged from v8.
+The continuous race dynamics and latency likelihoods are unchanged.
 Only unique earliest winners emit a routed class spike and inhibitory latch.
 Tied or silent races emit no class identity and therefore provide silent
 free-running feedback.  Feedback events are counted only when they are routed
@@ -14,21 +14,21 @@ from typing import Dict, List, Tuple
 import torch
 from torch import nn
 
-from src.models.spike_native_patch_lm_v8 import (
+from src.models.continuous_wta_ttfs_decoder import (
     OUTPUT_HEADS,
     PATCH_ARCHITECTURES,
     ContinuousRacePopulation,
     DirectRaceToFirstSpikeByteHead,
     LocalByteLIFDecoderContinuousTTFS,
     NibbleRaceToFirstSpikeByteHead,
-    SpikeNativePatchLanguageModelV8,
+    ContinuousWTATTFSPatchLanguageModel,
 )
 
 PATCH_LEDGER_V9_VERSION = "codec_free_patch_v9_continuous_ttfs_unique_wta"
 
 
-class ContinuousRacePopulationV9(ContinuousRacePopulation):
-    """v8 race with routed events restricted to valid unique winners."""
+class EventAccountedRacePopulation(ContinuousRacePopulation):
+    """Continuous race with events restricted to valid unique winners."""
 
     def forward(
         self,
@@ -65,10 +65,10 @@ class ContinuousRacePopulationV9(ContinuousRacePopulation):
         return scores, detail
 
 
-class DirectRaceToFirstSpikeByteHeadV9(DirectRaceToFirstSpikeByteHead):
+class EventAccountedDirectTTFSHead(DirectRaceToFirstSpikeByteHead):
     def __init__(self, *, hidden_dim: int, seed: int = 1, **kwargs: object) -> None:
         nn.Module.__init__(self)
-        self.population = ContinuousRacePopulationV9(
+        self.population = EventAccountedRacePopulation(
             hidden_dim=hidden_dim,
             classes=256,
             seed=int(seed) + 32452843,
@@ -78,16 +78,16 @@ class DirectRaceToFirstSpikeByteHeadV9(DirectRaceToFirstSpikeByteHead):
         self._last_margin_loss: torch.Tensor | None = None
 
 
-class NibbleRaceToFirstSpikeByteHeadV9(NibbleRaceToFirstSpikeByteHead):
+class EventAccountedNibbleTTFSHead(NibbleRaceToFirstSpikeByteHead):
     def __init__(self, *, hidden_dim: int, seed: int = 1, **kwargs: object) -> None:
         nn.Module.__init__(self)
-        self.high = ContinuousRacePopulationV9(
+        self.high = EventAccountedRacePopulation(
             hidden_dim=hidden_dim,
             classes=16,
             seed=int(seed) + 15485863,
             **kwargs,
         )
-        self.low = ContinuousRacePopulationV9(
+        self.low = EventAccountedRacePopulation(
             hidden_dim=hidden_dim,
             classes=16,
             seed=int(seed) + 32452843,
@@ -102,7 +102,7 @@ class NibbleRaceToFirstSpikeByteHeadV9(NibbleRaceToFirstSpikeByteHead):
         self._last_valid_unique: torch.Tensor | None = None
 
 
-class LocalByteLIFDecoderContinuousTTFSV9(LocalByteLIFDecoderContinuousTTFS):
+class EventAccountedTTFSPatchDecoder(LocalByteLIFDecoderContinuousTTFS):
     """v8 decoder with exact next-position feedback event accounting."""
 
     def __init__(self, *, output_head: str, **kwargs: object) -> None:
@@ -121,9 +121,9 @@ class LocalByteLIFDecoderContinuousTTFSV9(LocalByteLIFDecoderContinuousTTFS):
             seed=int(kwargs.get("seed", 1)),
         )
         self.output_head = (
-            DirectRaceToFirstSpikeByteHeadV9(**common)
+            EventAccountedDirectTTFSHead(**common)
             if output_head == "ttfs_direct_256"
-            else NibbleRaceToFirstSpikeByteHeadV9(**common)
+            else EventAccountedNibbleTTFSHead(**common)
         )
 
     def forward(
@@ -248,13 +248,13 @@ class LocalByteLIFDecoderContinuousTTFSV9(LocalByteLIFDecoderContinuousTTFS):
         return output
 
 
-class SpikeNativePatchLanguageModelV9(SpikeNativePatchLanguageModelV8):
+class EventAccountedWTATTFSPatchLanguageModel(ContinuousWTATTFSPatchLanguageModel):
     """v8 latency dynamics with unique-only WTA routing and exact feedback."""
 
     def __init__(self, *, output_head: str, **kwargs: object) -> None:
         super().__init__(output_head=output_head, **kwargs)
         if output_head != "dense_reference":
-            self.decoder = LocalByteLIFDecoderContinuousTTFSV9(
+            self.decoder = EventAccountedTTFSPatchDecoder(
                 context_dim=int(kwargs.get("hidden_dim", 64)),
                 max_patch_bytes=int(kwargs["max_patch_bytes"]),
                 output_head=output_head,
@@ -295,9 +295,9 @@ __all__ = [
     "OUTPUT_HEADS",
     "PATCH_ARCHITECTURES",
     "PATCH_LEDGER_V9_VERSION",
-    "ContinuousRacePopulationV9",
-    "DirectRaceToFirstSpikeByteHeadV9",
-    "NibbleRaceToFirstSpikeByteHeadV9",
-    "LocalByteLIFDecoderContinuousTTFSV9",
-    "SpikeNativePatchLanguageModelV9",
+    "EventAccountedRacePopulation",
+    "EventAccountedDirectTTFSHead",
+    "EventAccountedNibbleTTFSHead",
+    "EventAccountedTTFSPatchDecoder",
+    "EventAccountedWTATTFSPatchLanguageModel",
 ]

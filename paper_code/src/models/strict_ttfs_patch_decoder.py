@@ -17,12 +17,12 @@ from torch import nn
 
 from src.models.spikegpt_reference import SpikeGPTReferenceLM, atan_spike
 from src.models.spike_native_patch_lm import PositionalPatchSpikeEncoder
-from src.models.spike_native_patch_lm_v2 import (
+from src.models.local_spiking_patch_decoder import (
     PATCH_ARCHITECTURES,
-    LocalByteLIFDecoderV2,
+    LocalByteLIFDecoder,
     _LIFDecoderLayer,
 )
-from src.models.spike_native_patch_lm_v5 import HierarchicalFirstSpikeByteHead
+from src.models.hierarchical_ttfs_patch_decoder import HierarchicalFirstSpikeByteHead
 from src.tokenizers.spiking_blt_frontend import injective_byte_spike_codebook
 
 PATCH_LEDGER_V6_VERSION = "codec_free_patch_v6_strict_ttfs_direct_and_nibble"
@@ -375,7 +375,7 @@ class LocalByteLIFDecoderStrictTTFS(nn.Module):
         return dict(self._last_stats)
 
 
-class SpikeNativePatchLanguageModelV6(nn.Module):
+class StrictTTFSPatchLanguageModel(nn.Module):
     """Unchanged patch encoder/backbone with dense, direct TTFS or nibble TTFS output."""
 
     def __init__(self, *, max_patch_bytes: int, hierarchical_encoder: bool, output_head: str,
@@ -396,7 +396,7 @@ class SpikeNativePatchLanguageModelV6(nn.Module):
         common = dict(context_dim=hidden_dim, max_patch_bytes=max_patch_bytes,
                       decoder_hidden_dim=decoder_hidden_dim, decoder_num_layers=decoder_num_layers, seed=seed)
         if output_head == "dense_reference":
-            self.decoder: nn.Module = LocalByteLIFDecoderV2(**common)
+            self.decoder: nn.Module = LocalByteLIFDecoder(**common)
         else:
             self.decoder = LocalByteLIFDecoderStrictTTFS(
                 **common, output_head=output_head, output_microsteps=output_microsteps,
@@ -446,4 +446,4 @@ class SpikeNativePatchLanguageModelV6(nn.Module):
 
 __all__ = ["OUTPUT_HEADS", "PATCH_ARCHITECTURES", "PATCH_LEDGER_V6_VERSION",
            "DirectFirstSpikeByteHead", "LocalByteLIFDecoderStrictTTFS",
-           "SpikeNativePatchLanguageModelV6"]
+           "StrictTTFSPatchLanguageModel"]

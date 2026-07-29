@@ -5,13 +5,13 @@ from __future__ import annotations
 
 from typing import Dict
 
-import scripts.train_2026_07_28_strict_ttfs_output_lm as base
-from src.energy.scalable_patch_projection_r4 import scalable_patch_projection_r4
+import scripts.train_ttfs_decoder as base
+from src.energy.wta_event_energy_projection import wta_event_energy_projection
 from src.models.spike_native_patch_lm import PositionalPatchSpikeEncoder
-from src.models.spike_native_patch_lm_v9 import (
+from src.models.event_accounted_wta_ttfs_decoder import (
     OUTPUT_HEADS,
     PATCH_ARCHITECTURES,
-    SpikeNativePatchLanguageModelV9,
+    EventAccountedWTATTFSPatchLanguageModel,
 )
 
 _original_metric_bundle = base.metric_bundle
@@ -35,7 +35,7 @@ def _corrected_projection(row: Dict[str, object]) -> Dict[str, float | int | str
         raise AssertionError(f"global input dimension mismatch: {existing} != {expected}")
     row["global_input_dimension"] = expected
     row["global_input_dimension_source"] = "model_architecture_exact"
-    return scalable_patch_projection_r4(row)
+    return wta_event_energy_projection(row)
 
 
 def _metric_bundle(
@@ -85,7 +85,7 @@ def _atomic_row(path, row: Dict[str, object]) -> None:
 
 base.OUTPUT_HEADS = OUTPUT_HEADS
 base.PATCH_ARCHITECTURES = PATCH_ARCHITECTURES
-base.SpikeNativePatchLanguageModelV6 = SpikeNativePatchLanguageModelV9
+base.StrictTTFSPatchLanguageModel = EventAccountedWTATTFSPatchLanguageModel
 base.scalable_patch_projection = _corrected_projection
 base.metric_bundle = _metric_bundle
 base.atomic_row = _atomic_row

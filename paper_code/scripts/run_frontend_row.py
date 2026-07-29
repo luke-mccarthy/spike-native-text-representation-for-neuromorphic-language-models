@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.energy.decisive_projection import decisive_energy_projection
+from src.energy.frontend_energy_projection import frontend_energy_projection
 
 
 BOUND_FIELDS = (
@@ -95,7 +95,7 @@ def main() -> None:
         fit_seconds = float(fit["fit_cpu_seconds"])
     command = [
         sys.executable,
-        "scripts/train_2026_07_17_canonical_lm.py",
+        "scripts/train_frontend_language_model.py",
         "--dataset", row["dataset"],
         "--data-tier", row["data_tier"],
         "--method", row["method"],
@@ -174,7 +174,7 @@ def main() -> None:
         result["matched_conventional_fit_training_selection_raw_bytes"] = "not_applicable"
         result["matched_conventional_fit_model_sha256"] = "not_applicable"
         result["matched_conventional_fit_model_used_by_row"] = "not_applicable"
-    result.update(decisive_energy_projection(
+    result.update(frontend_energy_projection(
         result,
         conventional_fit_cpu_seconds=fit_seconds,
     ))

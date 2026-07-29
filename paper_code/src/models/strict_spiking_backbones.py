@@ -162,7 +162,7 @@ class StrictSpikeRWKVV2LM(nn.Module):
         return logits, stats
 
 
-def build_strict_spike_rwkv_v2_lm(
+def build_strict_spike_rwkv_lm(
     vocab_size: int,
     input_dim: int = 32,
     hidden_dim: int = 64,

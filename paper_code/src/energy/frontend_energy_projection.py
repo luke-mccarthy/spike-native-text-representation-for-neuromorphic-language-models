@@ -367,7 +367,7 @@ def phase_projection(
     return result
 
 
-def decisive_energy_projection(
+def frontend_energy_projection(
     row: Mapping[str, object],
     *,
     conventional_fit_cpu_seconds: float | None = None,
