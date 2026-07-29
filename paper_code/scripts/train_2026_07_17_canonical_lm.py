@@ -81,7 +81,12 @@ from src.tokenizers.spike_boundary_native_levels import (
 
 
 PROTOCOL_ID = "canonical_frontend_protocol_2026_07_16_v1"
-CANONICAL_ROOT = Path(\n    os.environ.get(\n        "SPIKE_TOKENIZER_CANONICAL_ROOT",\n        "/scratch/user/lukemccarthy/datasets/spike_tokenizer_canonical_2026_07_16",\n    )\n)
+CANONICAL_ROOT = Path(
+    os.environ.get(
+        "SPIKE_TOKENIZER_CANONICAL_ROOT",
+        "/scratch/user/lukemccarthy/datasets/spike_tokenizer_canonical_2026_07_16",
+    )
+)
 TOKENIZER_ROOT = ROOT / "tokenizers/2026_07_16_canonical"
 OFFICIAL_SPIKEGPT_TOKENIZER_PATH = (
     ROOT / "assets/tokenizers/spikegpt_20B_tokenizer.json"

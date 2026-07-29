@@ -27,7 +27,12 @@ from src.canonical_data_contract import (
 )
 
 
-CANONICAL_ROOT = Path(\n    os.environ.get(\n        "SPIKE_TOKENIZER_CANONICAL_ROOT",\n        "/scratch/user/lukemccarthy/datasets/spike_tokenizer_canonical_2026_07_16",\n    )\n)
+CANONICAL_ROOT = Path(
+    os.environ.get(
+        "SPIKE_TOKENIZER_CANONICAL_ROOT",
+        "/scratch/user/lukemccarthy/datasets/spike_tokenizer_canonical_2026_07_16",
+    )
+)
 SPECS = {
     "bpe8000": ("bpe", 8000),
     "bpe16000": ("bpe", 16000),
