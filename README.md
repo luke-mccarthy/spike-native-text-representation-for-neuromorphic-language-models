@@ -1,7 +1,7 @@
 # Toward Spike-Native Text Representation
 
 Reproduction code, frozen configurations, and raw result records for the paper
-*Interrogating Text Representation for Spike-Native Language Modelling*.
+*Toward Spike-Native Text Representation for Spiking Language Models*.
 
 This repository is a compact paper artifact. It contains only:
 
