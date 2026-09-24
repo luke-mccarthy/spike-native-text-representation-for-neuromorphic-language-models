@@ -189,6 +189,13 @@ CSVs (`results/front_end/all_rows.csv`, `results/temporal_decoders/all_rows.csv`
 python scripts/make_figures.py --output-dir outputs/figures
 ```
 
+This writes six figures: the five reported in the paper (front-end quality,
+rate-quality trade-off, quality-energy frontier, TTFS operating points, TTFS
+paired trade-offs), plus a supplementary `figure6_energy_scenario_sensitivity.png`
+not in the paper, showing how the headline energy-reduction percentages move
+under the low/central/high coefficient scenarios defined in Methods S3.8 (the
+paper's tables and figures only ever plot the central scenario).
+
 ### 8. Compare your own runs against the reported results
 
 Your freshly generated rows land in `outputs/front_end` and

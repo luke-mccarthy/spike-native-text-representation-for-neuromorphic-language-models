@@ -76,14 +76,23 @@ naming line up exactly with what `prepare_canonical_splits.py` expects). It
 has **not** been confirmed byte-for-byte against the original source file: no
 committed job log records the literal command that produced it, and this
 repository's sandboxed audit environment could not reach `huggingface.co` to
-check the resulting hash directly. After running the script above, run
-`python reproduce.py prepare-data --tinystories-5000
-data/sources/tinystories_5000.txt ...` and compare the resulting
-`data/canonical/manifest.json` against `docs/canonical_file_manifest.json`
-(or just run `python scripts/validate_release.py`, which checks this
-automatically once the canonical files exist). If the hashes do not match,
-this reconstruction is wrong and should be corrected rather than worked
-around.
+check the resulting hash directly.
+
+**Checking the reconstruction.** `scripts/verify_tinystories_5000.py` checks
+a candidate `tinystories_5000.txt` against the paper's recorded hashes
+without needing the Text8 or WikiText-2 source files (it only needs the
+TinyStories file, unlike the full `prepare-data` command):
+
+```bash
+python scripts/verify_tinystories_5000.py --source data/sources/tinystories_5000.txt
+```
+
+It prints PASS/FAIL per split (train/validation/test) against
+`docs/canonical_file_manifest.json`. If it fails, this reconstruction is
+wrong and should be corrected rather than worked around -- please report it.
+(Once all three source corpora are available, `python reproduce.py
+prepare-data ...` followed by `python reproduce.py validate` performs the
+same check as part of building the complete canonical dataset.)
 
 ## SentencePiece artifacts
 

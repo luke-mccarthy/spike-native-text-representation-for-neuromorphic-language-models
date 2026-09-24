@@ -114,10 +114,12 @@ def steps_per_byte(group: Sequence[Mapping[str, str]]) -> float:
     return sum(vals) / len(vals)
 
 
-def energy_values(group: Sequence[Mapping[str, str]]) -> List[float]:
+def energy_values(group: Sequence[Mapping[str, str]], scenario: str = "central") -> List[float]:
+    patch_col = f"validation_patch_projected_end_to_end_energy_pj_per_raw_byte_{scenario}"
+    dense_col = f"validation_decisive_projected_end_to_end_energy_pj_per_raw_byte_{scenario}"
     out = []
     for row in group:
-        raw = row.get(PATCH_ENERGY_COL) or row.get(ENERGY_COL)
+        raw = row.get(patch_col) or row.get(dense_col)
         out.append(float(raw))
     return out
 
@@ -334,6 +336,72 @@ def figure5_ttfs_paired_bars(rows: List[Dict[str, str]], output_dir: Path) -> No
     plt.close(fig)
 
 
+SCENARIOS = ["low", "central", "high"]
+SCENARIO_COLORS = {"low": "#8FBF8F", "central": "#2F5597", "high": "#C0504D"}
+SENSITIVITY_METHODS = [
+    ("byte", "fixed_1of256_byte", None, "Byte 1-of-256 vs BPE-16k"),
+    ("byte_patch_autoregressive", None, 1, "Fixed patch-8 vs BPE-16k"),
+]
+
+
+def figure6_energy_scenario_sensitivity(rows: List[Dict[str, str]], output_dir: Path) -> None:
+    """Supplementary figure: how much does the headline energy-reduction claim
+    move if the low/high coefficient scenarios from Methods S3.8 are used
+    instead of the central scenario shown in the paper's main figures? Both
+    low/central/high are defined in the paper but only central is ever
+    plotted; this makes the sensitivity visible."""
+    fig, axes = plt.subplots(1, 3, figsize=(15, 5.5), sharey=True)
+    bar_width = 0.25
+    n_groups = len(SENSITIVITY_METHODS)
+    x = list(range(n_groups))
+
+    for axis, dataset in zip(axes, DATASETS):
+        grouped = front_end_rows_by_method(rows, dataset)
+        bpe16_group = grouped["BPE-16k"]
+        max_value = 0.0
+        for scenario_index, scenario in enumerate(SCENARIOS):
+            offset = (scenario_index - (len(SCENARIOS) - 1) / 2) * bar_width
+            bpe16_energy = sum(energy_values(bpe16_group, scenario)) / len(bpe16_group)
+            reductions = []
+            for method, sub, patch_index, label in SENSITIVITY_METHODS:
+                if method == "byte_patch_autoregressive":
+                    method_group = grouped["Fixed patch-8"]
+                else:
+                    method_group = grouped[label.split(" vs ")[0]]
+                method_energy = sum(energy_values(method_group, scenario)) / len(method_group)
+                reduction = 100 * (1 - method_energy / bpe16_energy)
+                reductions.append(reduction)
+            max_value = max(max_value, max(reductions))
+            bars = axis.bar(
+                [xi + offset for xi in x], reductions, width=bar_width,
+                color=SCENARIO_COLORS[scenario], edgecolor="black", linewidth=0.5,
+            )
+            for bar, value in zip(bars, reductions):
+                axis.annotate(
+                    f"{value:.0f}%", (bar.get_x() + bar.get_width() / 2, value),
+                    textcoords="offset points", xytext=(0, 3), ha="center", fontsize=7.5, rotation=90,
+                )
+        axis.set_xticks(x)
+        axis.set_xticklabels([label for _m, _s, _p, label in SENSITIVITY_METHODS], rotation=12, ha="right")
+        axis.set_title(DATASET_LABELS[dataset])
+        axis.set_ylim(0, max_value * 1.35)
+        axis.grid(alpha=0.25, axis="y")
+    axes[0].set_ylabel("Projected end-to-end energy saved (%)")
+
+    legend_handles = [
+        plt.Rectangle((0, 0), 1, 1, facecolor=SCENARIO_COLORS[s], edgecolor="black", linewidth=0.5,
+                       label=f"{s.capitalize()} coefficients")
+        for s in SCENARIOS
+    ]
+    fig.legend(handles=legend_handles, loc="lower center", ncol=3, frameon=False, bbox_to_anchor=(0.5, -0.02))
+    fig.suptitle(
+        "Sensitivity of the energy-reduction claim to the low/central/high coefficient scenarios (Methods S3.8)"
+    )
+    fig.tight_layout(rect=(0, 0.08, 1, 0.93))
+    fig.savefig(output_dir / "figure6_energy_scenario_sensitivity.png", dpi=300)
+    plt.close(fig)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--front-end-csv", type=Path, default=FRONT_END_CSV)
@@ -350,7 +418,8 @@ def main() -> None:
     figure3_energy_frontier(front_end_rows, args.output_dir)
     figure4_ttfs_operating_points(temporal_rows, args.output_dir)
     figure5_ttfs_paired_bars(temporal_rows, args.output_dir)
-    print(f"Wrote 5 figures to {args.output_dir}")
+    figure6_energy_scenario_sensitivity(front_end_rows, args.output_dir)
+    print(f"Wrote 6 figures to {args.output_dir}")
 
 
 if __name__ == "__main__":
