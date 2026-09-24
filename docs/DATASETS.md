@@ -59,7 +59,7 @@ must contain exactly 5,000 documents separated by the literal marker
 fails otherwise.
 
 **Reconstructing the source file.** `scripts/fetch_tinystories_5000.py`
-reconstructs this file: it takes the first 5,000 examples of the
+rebuilds this file: it takes the first 5,000 examples of the
 [`roneneldan/TinyStories`](https://huggingface.co/datasets/roneneldan/TinyStories)
 train split, in the dataset's own unshuffled order, and joins them with the
 `<|endoftext|>` marker.
@@ -69,27 +69,33 @@ pip install datasets  # not part of the pinned environment; only needed once
 python scripts/fetch_tinystories_5000.py --output data/sources/tinystories_5000.txt
 ```
 
-This procedure has been reconstructed from the private development history
-(an earlier, differently-formatted prototype script and a later, format-
-matching script were both found; the later one's output format and file
-naming line up exactly with what `prepare_canonical_splits.py` expects). It
-has **not** been confirmed byte-for-byte against the original source file: no
-committed job log records the literal command that produced it, and this
-repository's sandboxed audit environment could not reach `huggingface.co` to
-check the resulting hash directly.
+**This procedure is confirmed byte-for-byte identical to the original
+source file.** The original `tinystories_5000.txt` still exists on the
+authors' Bunya HPC storage and is recorded in the 2026-07-16 canonical
+manifest. The author independently re-ran the procedure above against the
+live `roneneldan/TinyStories` dataset and diffed the result against that
+surviving original file. Both are:
 
-**Checking the reconstruction.** `scripts/verify_tinystories_5000.py` checks
-a candidate `tinystories_5000.txt` against the paper's recorded hashes
-without needing the Text8 or WikiText-2 source files (it only needs the
-TinyStories file, unlike the full `prepare-data` command):
+- **Bytes:** 4,262,315
+- **SHA-256:** `afff3659756a01acd8c95ed8b16c67b0ad829cd8e3d7fc6161a1bc9982c04fb4`
+
+`scripts/fetch_tinystories_5000.py` checks its own output against this exact
+hash and prints PASS/FAIL immediately, so you can confirm your download
+matches before doing anything else with it. This hash could stop matching in
+the future only if the upstream `roneneldan/TinyStories` dataset itself is
+ever revised; if that happens, this file (and the original) would need to be
+substituted for a differently-sourced but pinned copy.
+
+**Checking the downstream splits.** `scripts/verify_tinystories_5000.py`
+additionally checks a candidate `tinystories_5000.txt` against the paper's
+recorded *post-split* hashes (train/validation/test after deduplication and
+the 80/10/10 assignment), without needing the Text8 or WikiText-2 source
+files:
 
 ```bash
 python scripts/verify_tinystories_5000.py --source data/sources/tinystories_5000.txt
 ```
 
-It prints PASS/FAIL per split (train/validation/test) against
-`docs/canonical_file_manifest.json`. If it fails, this reconstruction is
-wrong and should be corrected rather than worked around -- please report it.
 (Once all three source corpora are available, `python reproduce.py
 prepare-data ...` followed by `python reproduce.py validate` performs the
 same check as part of building the complete canonical dataset.)

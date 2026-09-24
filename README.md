@@ -94,8 +94,9 @@ You need, locally:
   python scripts/fetch_tinystories_5000.py --output data/sources/tinystories_5000.txt
   ```
 
-  (see [docs/DATASETS.md](docs/DATASETS.md) for the provenance caveat on this
-  reconstruction).
+  This is confirmed byte-for-byte identical to the original source file used
+  by the study (see [docs/DATASETS.md](docs/DATASETS.md) for the reference
+  SHA-256 and how to check it).
 
 ### 3. Build the canonical, hash-verified splits
 
