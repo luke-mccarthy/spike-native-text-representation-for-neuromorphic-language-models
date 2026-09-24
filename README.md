@@ -119,17 +119,21 @@ mapped to their original development paths in
 [docs/SOURCE_MAPPING.md](docs/SOURCE_MAPPING.md). The integrity validator
 checks those declarations without calculating or interpreting paper findings.
 
+## Licence
+
+This repository is released under the [MIT Licence](LICENSE). The three
+source corpora (TinyStories, Text8, WikiText-2) are not redistributed here
+and remain governed by their own original licences (see
+[docs/DATASETS.md](docs/DATASETS.md)).
+
 ## Access and contributions
 
-This repository is currently a private review artifact. When made public,
-GitHub grants read/clone/fork access to the public but direct push access only
-to explicitly authorised collaborators. This project is not accepting direct
-external contributions; independent work should use a fork or separate clone.
-
-No software licence has yet been selected. A licence should be chosen before
-public release.
+GitHub grants read/clone/fork access to the public; direct push access is
+limited to the authors. This project is not accepting direct external
+contributions; independent work should use a fork or separate clone.
 
 ## Citation
 
-Citation metadata is provided in [`CITATION.cff`](CITATION.cff). Update the
-paper DOI and publication metadata there after acceptance.
+Citation metadata is provided in [`CITATION.cff`](CITATION.cff). The
+preferred-citation entry will be updated with the final publication venue and
+DOI once the paper is accepted.

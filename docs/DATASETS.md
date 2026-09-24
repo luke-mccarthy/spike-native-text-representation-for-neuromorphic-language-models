@@ -52,6 +52,22 @@ The TinyStories source is a study-specific 5,000-story file. A differently
 sampled 5,000-story subset will not reproduce the recorded manifest and should
 not be silently substituted.
 
+**TinyStories-5000 source format.** The file passed to `--tinystories-5000`
+must contain exactly 5,000 documents separated by the literal marker
+`<|endoftext|>` on its own line (the format used by the official
+[`roneneldan/TinyStories`](https://huggingface.co/datasets/roneneldan/TinyStories)
+raw text releases, e.g. `TinyStoriesV2-GPT4-train.txt`), with no blank
+documents. `prepare_canonical_splits.py` asserts the document count is exactly
+5,000 and fails otherwise.
+
+This repository does not currently include the script or exact procedure used
+to select which 5,000 stories (and in what order) were drawn from the full
+TinyStories corpus for this study. Reviewers who need a byte-identical
+`tinystories_5000.txt` should contact the authors for that specific source
+file; independently re-sampling 5,000 stories will produce a file with
+different SHA-256 hashes and will not reproduce Table 1's exact byte counts,
+even though it will exercise the same code path.
+
 ## SentencePiece artifacts
 
 The BPE-8k, BPE-16k, and Unigram-4k models are fitted independently for each

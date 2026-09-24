@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "spike-native-text-representation"
 version = "0.1.0"
 description = "Reproduction artifact for spike-native text-representation experiments"
+license = { file = "LICENSE" }
 requires-python = "==3.10.*"
 dependencies = [
   "numpy==2.2.6",
