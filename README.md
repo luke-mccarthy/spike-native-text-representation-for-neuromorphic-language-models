@@ -25,7 +25,7 @@ results/
   front_end/              Raw 90-row front-end comparison
   tokenizer_fits/         Raw 9-row tokenizer-fit records and audit
   temporal_decoders/      Raw 162-row decoder factorial
-scripts/                  Release-integrity utilities
+scripts/                  Release-integrity utilities and figure generation
 paper_code/               Curated paper runtime with descriptive public names
 provenance/               Unmodified originals of portability-patched files
 tests/                    Release-integrity tests
@@ -102,6 +102,14 @@ python reproduce.py temporal-decoder \
 Rows are one-indexed and map directly to the frozen CSV grids. Full factorials
 can be distributed with a scheduler by assigning one grid row to each task.
 The original runs used one CPU thread per task.
+
+Regenerate the paper's result figures directly from the archived raw CSVs
+(`results/front_end/all_rows.csv`, `results/temporal_decoders/all_rows.csv`;
+no new experiment runs required):
+
+```bash
+python scripts/make_figures.py --output-dir outputs/figures
+```
 
 ## Reproducibility boundary
 
