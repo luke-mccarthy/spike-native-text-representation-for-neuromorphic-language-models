@@ -207,6 +207,45 @@ def validate_source_manifest() -> None:
             )
 
 
+def validate_canonical_data() -> None:
+    """If local canonical data has been prepared, check it against the
+    committed reference manifest. This is a no-op (prints a note and returns)
+    when no local canonical data exists, so it never fails CI or a fresh
+    checkout that has not run `reproduce.py prepare-data` yet."""
+    local_manifest_path = ROOT / "data/canonical/manifest.json"
+    if not local_manifest_path.is_file():
+        print("SKIP: no local data/canonical/manifest.json found (run `python reproduce.py prepare-data` first)")
+        return
+    local_files = {
+        record["relative_path"]: record
+        for record in json.loads(local_manifest_path.read_text())["files"]
+    }
+    reference_files = {
+        record["relative_path"]: record
+        for record in json.loads(
+            (ROOT / "docs/canonical_file_manifest.json").read_text()
+        )["files"]
+    }
+    mismatches = []
+    for relative_path, reference in reference_files.items():
+        local = local_files.get(relative_path)
+        if local is None:
+            mismatches.append(f"missing: {relative_path}")
+        elif local["sha256"] != reference["sha256"] or local["bytes"] != reference["bytes"]:
+            mismatches.append(
+                f"hash/byte mismatch: {relative_path} "
+                f"(local {local['bytes']} bytes / {local['sha256'][:12]}..., "
+                f"reference {reference['bytes']} bytes / {reference['sha256'][:12]}...)"
+            )
+    if mismatches:
+        detail = "\n  ".join(mismatches)
+        raise AssertionError(
+            "Local canonical data does not match docs/canonical_file_manifest.json:\n  "
+            + detail
+        )
+    print(f"PASS: local canonical data matches docs/canonical_file_manifest.json for {len(reference_files)} files")
+
+
 def validate_environment_evidence() -> None:
     evidence = json.loads((ROOT / "docs/bunya_environment.json").read_text())
     require(
@@ -241,6 +280,7 @@ def main() -> None:
     validate_front_end()
     validate_temporal_decoders()
     print("PASS: release grids, raw archives, audits, and hashes are consistent")
+    validate_canonical_data()
 
 
 if __name__ == "__main__":

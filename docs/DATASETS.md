@@ -54,19 +54,36 @@ not be silently substituted.
 
 **TinyStories-5000 source format.** The file passed to `--tinystories-5000`
 must contain exactly 5,000 documents separated by the literal marker
-`<|endoftext|>` on its own line (the format used by the official
-[`roneneldan/TinyStories`](https://huggingface.co/datasets/roneneldan/TinyStories)
-raw text releases, e.g. `TinyStoriesV2-GPT4-train.txt`), with no blank
-documents. `prepare_canonical_splits.py` asserts the document count is exactly
-5,000 and fails otherwise.
+`<|endoftext|>` on its own line, with no blank documents.
+`prepare_canonical_splits.py` asserts the document count is exactly 5,000 and
+fails otherwise.
 
-This repository does not currently include the script or exact procedure used
-to select which 5,000 stories (and in what order) were drawn from the full
-TinyStories corpus for this study. Reviewers who need a byte-identical
-`tinystories_5000.txt` should contact the authors for that specific source
-file; independently re-sampling 5,000 stories will produce a file with
-different SHA-256 hashes and will not reproduce Table 1's exact byte counts,
-even though it will exercise the same code path.
+**Reconstructing the source file.** `scripts/fetch_tinystories_5000.py`
+reconstructs this file: it takes the first 5,000 examples of the
+[`roneneldan/TinyStories`](https://huggingface.co/datasets/roneneldan/TinyStories)
+train split, in the dataset's own unshuffled order, and joins them with the
+`<|endoftext|>` marker.
+
+```bash
+pip install datasets  # not part of the pinned environment; only needed once
+python scripts/fetch_tinystories_5000.py --output data/sources/tinystories_5000.txt
+```
+
+This procedure has been reconstructed from the private development history
+(an earlier, differently-formatted prototype script and a later, format-
+matching script were both found; the later one's output format and file
+naming line up exactly with what `prepare_canonical_splits.py` expects). It
+has **not** been confirmed byte-for-byte against the original source file: no
+committed job log records the literal command that produced it, and this
+repository's sandboxed audit environment could not reach `huggingface.co` to
+check the resulting hash directly. After running the script above, run
+`python reproduce.py prepare-data --tinystories-5000
+data/sources/tinystories_5000.txt ...` and compare the resulting
+`data/canonical/manifest.json` against `docs/canonical_file_manifest.json`
+(or just run `python scripts/validate_release.py`, which checks this
+automatically once the canonical files exist). If the hashes do not match,
+this reconstruction is wrong and should be corrected rather than worked
+around.
 
 ## SentencePiece artifacts
 

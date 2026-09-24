@@ -37,9 +37,36 @@ reproduce.py              Friendly single-row reproduction interface
 The files under `results/` are raw experimental records. This repository does
 not provide a narrative interpretation of those values.
 
-## Quick start
+## Code map: networks, front-ends, and decoders
 
-Create the recorded Conda environment:
+The paper decomposes the pipeline into four stages (raw bytes -> front-end
+units/spikes -> SpikeGPT-like global core -> local/terminal decoder ->
+p(byte)). The table below points at where each stage actually lives, so you
+do not have to guess from file names alone. Exact original (private-repo)
+paths for every file are in [docs/SOURCE_MAPPING.md](docs/SOURCE_MAPPING.md).
+
+| Paper concept | Primary file(s) |
+|---|---|
+| SpikeGPT-like global backbone (RWKV time-mix/channel-mix, WKV recurrence, sequence LIF neuron, ATan surrogate) | `paper_code/src/models/spikegpt_reference.py` |
+| Conventional BPE/Unigram subword front-end (token ID -> learned binary embedding) | `paper_code/src/models/spike_input_interfaces.py`, `paper_code/scripts/fit_sentencepiece_tokenizer.py` |
+| Predictive spike-boundary + digital-codec hybrid front-end | `paper_code/src/tokenizers/spike_boundary_native_levels.py`, `spike_boundary_refined.py` |
+| Codec-free byte spike codes (1-of-256, 2-of-32, recurrent-LIF reservoir + injective suffix) | `paper_code/src/models/spike_input_interfaces.py` |
+| Injective/constant-weight codes shared across byte and patch front-ends | `paper_code/src/tokenizers/lossless_codecs.py` |
+| Codec-free positional patch front-ends (fixed patch-4/8, adaptive patch-8, homeostatic boundary rule) + local LIF decoder with dense 256-way readout | `paper_code/src/models/spike_native_patch_lm.py`, `local_spiking_patch_decoder.py`, `spike_count_patch_decoder.py`, `paper_code/src/tokenizers/spike_native_patch_frontends.py` |
+| Strict TTFS output heads (direct 256-neuron race, factorised 2x16-neuron nibble race) | `paper_code/src/models/hierarchical_ttfs_patch_decoder.py`, `strict_ttfs_patch_decoder.py`, `continuous_wta_ttfs_decoder.py`, `event_accounted_wta_ttfs_decoder.py`, `audited_ttfs_patch_decoder.py` (later files in this list are additive refinements of the earlier ones; `audited_ttfs_patch_decoder.py` is what produced the reported Table 4 numbers) |
+| Operation/energy ledgers (dense MACs, SynOps, state updates, routed spikes, low/central/high coefficients) | `paper_code/src/energy/analytical_compute.py`, `frontend_energy_projection.py`, `frontend_memory.py`, `scalable_patch_projection.py`, `wta_event_energy_projection.py`, plus `paper_code/src/models/spikegpt_operation_accounting.py` |
+| Canonical dataset splitting and the fail-closed data contract | `paper_code/src/canonical_data_contract.py`, `paper_code/scripts/prepare_canonical_splits.py` |
+| Per-row training/evaluation entry points | `paper_code/scripts/train_frontend_language_model.py` (subword/boundary/byte rows), `train_patch_language_model.py` (patch rows, Table 3), `train_ttfs_decoder.py` + `run_temporal_decoder_comparison.py` (Table 4) |
+
+`paper_code/src/tokenizers/blt_patcher.py`, `spiking_blt_frontend.py`, and
+`gpt_neox_20b.py` are supporting infrastructure exercised during development
+(BLT-style and GPT-NeoX-tokenizer comparisons) rather than one of the ten
+front-ends reported in Table 3; they are included because the frozen
+front-end commit imports them.
+
+## Setup and full reproduction walkthrough
+
+### 1. Install the environment
 
 ```bash
 conda env create -f environment.yml
@@ -47,38 +74,71 @@ conda activate spike-native-text
 python reproduce.py validate
 ```
 
-Prepare the canonical data layout from local source files:
+`validate` checks the committed raw archives, hashes, and provenance records
+only; it does not require any dataset and always works on a fresh checkout.
+
+### 2. Obtain the three source corpora
+
+This repository does not redistribute dataset payloads (see
+[docs/DATASETS.md](docs/DATASETS.md) for exact requirements and licensing).
+You need, locally:
+
+- **Text8**: the standard 100,000,000-byte `text8` corpus.
+- **WikiText-2**: the official `wiki.train.tokens` / `wiki.valid.tokens` /
+  `wiki.test.tokens` files.
+- **TinyStories-5000**: a 5,000-story, `<|endoftext|>`-delimited file. Build
+  it with:
+
+  ```bash
+  pip install datasets
+  python scripts/fetch_tinystories_5000.py --output data/sources/tinystories_5000.txt
+  ```
+
+  (see [docs/DATASETS.md](docs/DATASETS.md) for the provenance caveat on this
+  reconstruction).
+
+### 3. Build the canonical, hash-verified splits
 
 ```bash
 python reproduce.py prepare-data \
   --text8-full /path/to/text8 \
-  --tinystories-5000 /path/to/tinystories_5000.txt \
+  --tinystories-5000 data/sources/tinystories_5000.txt \
   --wikitext2-train /path/to/wiki.train.tokens \
   --wikitext2-validation /path/to/wiki.valid.tokens \
   --wikitext2-test /path/to/wiki.test.tokens \
   --output-root data/canonical
+
+python reproduce.py validate
 ```
 
-Fit one of the nine dataset-specific conventional tokenizers:
+The second `validate` call now also compares your local
+`data/canonical/manifest.json` against the paper's recorded
+`docs/canonical_file_manifest.json` (byte counts and SHA-256 per file) and
+fails loudly if anything differs, so you know immediately whether your local
+data matches the paper's before spending compute on training.
+
+### 4. Fit the conventional tokenizers
+
+Nine rows (BPE-8k, BPE-16k, Unigram-4k x 3 datasets):
 
 ```bash
-python reproduce.py fit-tokenizer \
-  --row 1 \
-  --data-root data/canonical \
-  --tokenizer-root tokenizers/fitted
+for row in $(seq 1 9); do
+  python reproduce.py fit-tokenizer \
+    --row "$row" \
+    --data-root data/canonical \
+    --tokenizer-root tokenizers/fitted
+done
 ```
 
-The generated dataset `manifest.json` must match the hashes recorded in
-`docs/canonical_file_manifest.json`. See [docs/DATASETS.md](docs/DATASETS.md)
-before running an experiment.
+### 5. Run the front-end comparison (Table 3, Figures 1-3)
 
-Print, without executing, the exact command for one front-end row:
+Inspect one row without running it:
 
 ```bash
 python reproduce.py front-end --row 1 --dry-run
 ```
 
-Run that row after preparing data and fitted SentencePiece models:
+Run one row:
 
 ```bash
 python reproduce.py front-end \
@@ -88,28 +148,59 @@ python reproduce.py front-end \
   --output-root outputs/front_end
 ```
 
-Print or run one temporal-decoder row:
+Run the full 90-row factorial (10 front-ends x 3 datasets x 3 seeds; this
+trains a small model per row and was originally run as 90 independent
+one-CPU-thread HPC tasks, so budget CPU time accordingly and prefer
+distributing rows across a scheduler over a serial loop):
+
+```bash
+for row in $(seq 1 90); do
+  python reproduce.py front-end \
+    --row "$row" \
+    --data-root data/canonical \
+    --tokenizer-root tokenizers/fitted \
+    --output-root outputs/front_end
+done
+```
+
+### 6. Run the temporal-decoder (TTFS) comparison (Table 4, Figures 4-5)
 
 ```bash
 python reproduce.py temporal-decoder --row 1 --dry-run
 
-python reproduce.py temporal-decoder \
-  --row 1 \
-  --data-root data/canonical \
-  --output-root outputs/temporal_decoders
+for row in $(seq 1 162); do
+  python reproduce.py temporal-decoder \
+    --row "$row" \
+    --data-root data/canonical \
+    --output-root outputs/temporal_decoders
+done
 ```
 
-Rows are one-indexed and map directly to the frozen CSV grids. Full factorials
-can be distributed with a scheduler by assigning one grid row to each task.
-The original runs used one CPU thread per task.
+162 rows = 3 patch architectures x 3 output heads (dense reference, direct
+TTFS, nibble TTFS) x 2 decoder capacities (matched, enlarged) x 3 datasets x
+3 seeds.
 
-Regenerate the paper's result figures directly from the archived raw CSVs
-(`results/front_end/all_rows.csv`, `results/temporal_decoders/all_rows.csv`;
-no new experiment runs required):
+### 7. Regenerate the paper's figures
+
+No new experiment runs required; this reads directly from the committed raw
+CSVs (`results/front_end/all_rows.csv`, `results/temporal_decoders/all_rows.csv`):
 
 ```bash
 python scripts/make_figures.py --output-dir outputs/figures
 ```
+
+### 8. Compare your own runs against the reported results
+
+Your freshly generated rows land in `outputs/front_end` and
+`outputs/temporal_decoders`, separate from the committed `results/` archives
+(which are frozen and never overwritten). Compare a run's `test_bpb` /
+`bits_per_raw_byte` and energy columns against the matching row in
+`results/front_end/all_rows.csv` or `results/temporal_decoders/all_rows.csv`
+to check reproduction. Exact bit-for-bit reproduction of every decimal is not
+expected across hardware/BLAS versions; large deviations are the signal to
+look for.
+
+Rows are one-indexed and map directly to the frozen CSV grids in `configs/`.
 
 ## Reproducibility boundary
 
