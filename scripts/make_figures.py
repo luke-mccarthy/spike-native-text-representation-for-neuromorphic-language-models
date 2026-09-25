@@ -225,9 +225,10 @@ def figure3_energy_frontier(rows: List[Dict[str, str]], output_dir: Path) -> Non
         axis.grid(alpha=0.25)
         axis.legend(loc="upper right", fontsize=8, frameon=False)
     # Note: this is the validation-split (single forward pass) energy projection,
-    # matching the paper's Table 3 "Central pJ/raw byte" column. It is not the
-    # training-phase projection (which would include the x3 surrogate-gradient
-    # backward-pass factor described in Methods S3.8); see the audit notes.
+    # matching the paper's "central pJ/raw byte" energy-summary column. It is
+    # not the training-phase projection (which would include the x3
+    # surrogate-gradient backward-pass factor described in the paper's energy
+    # accounting methodology); see the audit notes.
     fig.suptitle("Front-end trade-off: predictive quality versus projected central energy")
     fig.legend(
         handles=method_legend_handles(), loc="lower center", ncol=5, frameon=False,
@@ -346,10 +347,10 @@ SENSITIVITY_METHODS = [
 
 def figure6_energy_scenario_sensitivity(rows: List[Dict[str, str]], output_dir: Path) -> None:
     """Supplementary figure: how much does the headline energy-reduction claim
-    move if the low/high coefficient scenarios from Methods S3.8 are used
-    instead of the central scenario shown in the paper's main figures? Both
-    low/central/high are defined in the paper but only central is ever
-    plotted; this makes the sensitivity visible."""
+    move if the low/high coefficient scenarios from the paper's energy
+    accounting methodology are used instead of the central scenario shown in
+    the paper's main figures? Low/central/high are all defined in the paper
+    but only central is ever plotted; this makes the sensitivity visible."""
     fig, axes = plt.subplots(1, 3, figsize=(15, 5.5), sharey=True)
     bar_width = 0.25
     n_groups = len(SENSITIVITY_METHODS)
@@ -395,7 +396,7 @@ def figure6_energy_scenario_sensitivity(rows: List[Dict[str, str]], output_dir: 
     ]
     fig.legend(handles=legend_handles, loc="lower center", ncol=3, frameon=False, bbox_to_anchor=(0.5, -0.02))
     fig.suptitle(
-        "Sensitivity of the energy-reduction claim to the low/central/high coefficient scenarios (Methods S3.8)"
+        "Sensitivity of the energy-reduction claim to the low/central/high coefficient scenarios"
     )
     fig.tight_layout(rect=(0, 0.08, 1, 0.93))
     fig.savefig(output_dir / "figure6_energy_scenario_sensitivity.png", dpi=300)

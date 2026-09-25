@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this code or its archived experimental records, please cite the associated paper."
-title: "Toward Spike-Native Text Representation for Spiking Language Models"
+title: "Spike-Native Text Representation for Neuromorphic Language Models"
 type: software
 license: MIT
 authors:
@@ -10,12 +10,12 @@ authors:
   - family-names: Rahimi Azghadi
     given-names: Mostafa
     affiliation: "James Cook University"
-repository-code: "https://github.com/luke-mccarthy/toward-spike-native-text-representation"
+repository-code: "https://github.com/luke-mccarthy/spike-native-text-representation-for-neuromorphic-language-models"
 version: "0.1.0-review"
 date-released: 2026-07-29
 preferred-citation:
   type: article
-  title: "Toward Spike-Native Text Representation for Spiking Language Models"
+  title: "Spike-Native Text Representation for Neuromorphic Language Models"
   authors:
     - family-names: McCarthy
       given-names: Luke

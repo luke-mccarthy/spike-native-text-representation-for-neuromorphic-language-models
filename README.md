@@ -1,7 +1,7 @@
-# Toward Spike-Native Text Representation
+# Spike-Native Text Representation for Neuromorphic Language Models
 
 Reproduction code, frozen configurations, and raw result records for the paper
-*Toward Spike-Native Text Representation for Spiking Language Models*.
+*Spike-Native Text Representation for Neuromorphic Language Models*.
 
 This repository is a compact paper artifact. It contains only:
 
@@ -53,16 +53,22 @@ paths for every file are in [docs/SOURCE_MAPPING.md](docs/SOURCE_MAPPING.md).
 | Codec-free byte spike codes (1-of-256, 2-of-32, recurrent-LIF reservoir + injective suffix) | `paper_code/src/models/spike_input_interfaces.py` |
 | Injective/constant-weight codes shared across byte and patch front-ends | `paper_code/src/tokenizers/lossless_codecs.py` |
 | Codec-free positional patch front-ends (fixed patch-4/8, adaptive patch-8, homeostatic boundary rule) + local LIF decoder with dense 256-way readout | `paper_code/src/models/spike_native_patch_lm.py`, `local_spiking_patch_decoder.py`, `spike_count_patch_decoder.py`, `paper_code/src/tokenizers/spike_native_patch_frontends.py` |
-| Strict TTFS output heads (direct 256-neuron race, factorised 2x16-neuron nibble race) | `paper_code/src/models/hierarchical_ttfs_patch_decoder.py`, `strict_ttfs_patch_decoder.py`, `continuous_wta_ttfs_decoder.py`, `event_accounted_wta_ttfs_decoder.py`, `audited_ttfs_patch_decoder.py` (later files in this list are additive refinements of the earlier ones; `audited_ttfs_patch_decoder.py` is what produced the reported Table 4 numbers) |
+| Strict TTFS output heads (direct 256-neuron race, factorised 2x16-neuron nibble race) | `paper_code/src/models/hierarchical_ttfs_patch_decoder.py`, `strict_ttfs_patch_decoder.py`, `continuous_wta_ttfs_decoder.py`, `event_accounted_wta_ttfs_decoder.py`, `audited_ttfs_patch_decoder.py` (later files in this list are additive refinements of the earlier ones; `audited_ttfs_patch_decoder.py` is what produced the reported paired-decoder results) |
 | Operation/energy ledgers (dense MACs, SynOps, state updates, routed spikes, low/central/high coefficients) | `paper_code/src/energy/analytical_compute.py`, `frontend_energy_projection.py`, `frontend_memory.py`, `scalable_patch_projection.py`, `wta_event_energy_projection.py`, plus `paper_code/src/models/spikegpt_operation_accounting.py` |
 | Canonical dataset splitting and the fail-closed data contract | `paper_code/src/canonical_data_contract.py`, `paper_code/scripts/prepare_canonical_splits.py` |
-| Per-row training/evaluation entry points | `paper_code/scripts/train_frontend_language_model.py` (subword/boundary/byte rows), `train_patch_language_model.py` (patch rows, Table 3), `train_ttfs_decoder.py` + `run_temporal_decoder_comparison.py` (Table 4) |
+| Per-row training/evaluation entry points | `paper_code/scripts/train_frontend_language_model.py` (subword/boundary/byte rows), `train_patch_language_model.py` (patch rows, the front-end quality/energy results), `train_ttfs_decoder.py` + `run_temporal_decoder_comparison.py` (the paired output-decoder results) |
 
 `paper_code/src/tokenizers/blt_patcher.py`, `spiking_blt_frontend.py`, and
 `gpt_neox_20b.py` are supporting infrastructure exercised during development
-(BLT-style and GPT-NeoX-tokenizer comparisons) rather than one of the ten
-front-ends reported in Table 3; they are included because the frozen
-front-end commit imports them.
+(BLT-style and GPT-NeoX-tokenizer comparisons) rather than one of the
+front-end families reported in the paper; they are included because the
+frozen front-end commit imports them.
+
+Table/figure numbers are intentionally omitted from this README, since the
+manuscript is still under revision and numbering moves between drafts. See
+the current manuscript itself for exact table/figure numbers, and match
+results by content (front-end quality, energy summary, paired decoder
+comparison, etc.) rather than by number.
 
 ## Setup and full reproduction walkthrough
 
@@ -131,7 +137,7 @@ for row in $(seq 1 9); do
 done
 ```
 
-### 5. Run the front-end comparison (Table 3, Figures 1-3)
+### 5. Run the front-end comparison (predictive quality and projected energy)
 
 Inspect one row without running it:
 
@@ -164,7 +170,7 @@ for row in $(seq 1 90); do
 done
 ```
 
-### 6. Run the temporal-decoder (TTFS) comparison (Table 4, Figures 4-5)
+### 6. Run the temporal-decoder (TTFS) comparison (paired output-decoder results)
 
 ```bash
 python reproduce.py temporal-decoder --row 1 --dry-run
@@ -190,12 +196,20 @@ CSVs (`results/front_end/all_rows.csv`, `results/temporal_decoders/all_rows.csv`
 python scripts/make_figures.py --output-dir outputs/figures
 ```
 
-This writes six figures: the five reported in the paper (front-end quality,
-rate-quality trade-off, quality-energy frontier, TTFS operating points, TTFS
-paired trade-offs), plus a supplementary `figure6_energy_scenario_sensitivity.png`
-not in the paper, showing how the headline energy-reduction percentages move
-under the low/central/high coefficient scenarios defined in Methods S3.8 (the
-paper's tables and figures only ever plot the central scenario).
+This writes six PNG files to the output directory. The filenames are
+generated by this script for its own bookkeeping and do not track the
+manuscript's own figure numbers (which move between drafts); match figures to
+the manuscript by content, not by filename:
+
+- front-end predictive quality across methods and datasets
+- predictive quality versus temporal compression (bytes per global step)
+- predictive quality versus projected energy (the quality-energy frontier)
+- TTFS output-head operating points (quality versus energy)
+- TTFS output-head paired quality/energy trade-offs versus the dense readout
+- a supplementary sensitivity chart, not in the manuscript, showing how the
+  headline energy-reduction percentages move under the low/central/high
+  energy-coefficient scenarios described in the Methods (the manuscript's own
+  tables and figures only ever plot the central scenario)
 
 ### 8. Compare your own runs against the reported results
 
@@ -235,8 +249,10 @@ and remain governed by their own original licences (see
 
 ## Access and contributions
 
-GitHub grants read/clone/fork access to the public; direct push access is
-limited to the authors. This project is not accepting direct external
+This repository is currently private, shared with reviewers on request. It
+will be made public, with GitHub granting read/clone/fork access to the
+public while direct push access remains limited to the authors, as part of
+the paper's release. This project is not accepting direct external
 contributions; independent work should use a fork or separate clone.
 
 ## Citation
