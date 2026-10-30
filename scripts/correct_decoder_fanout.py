@@ -16,12 +16,16 @@ accumulations`` and recomputes the energy projection with
 ``src.energy.wta_event_energy_projection``:
 
 * one-layer decoders: corrected = archived x 8 / m0, where m0 is the archived
-  per-input multiplier (exact);
+  per-input multiplier;
 * two-layer decoders: corrected = archived + (8 - m0) x A0, where A0, the
   layer-0 active-input total, is rebuilt from the archived context, feedback
   and position event counts. A0 is exact for fixed patches; for adaptive
   patches the context term uses the mean patch length of the shared
   segmentation.
+
+The original TTFS counter truncated each per-step product to an integer. Where
+m0 is not a whole number (6.5 or 12.5), the corrected count can therefore be
+lower than a rerun with the corrected counter by up to 0.5 per decoder step.
 
 Inputs:  results/temporal_decoders/all_rows.csv (unchanged)
 Outputs: results/temporal_decoders_corrected/all_rows.csv
