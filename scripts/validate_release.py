@@ -228,6 +228,23 @@ def validate_accounting_corrections() -> None:
         require(old["test_bpb"] == new["test_bpb"], "corrected decoder archive changed a BPB value")
 
 
+def validate_documentation_changes() -> None:
+    manifest = json.loads((ROOT / "docs/source_manifest.json").read_text())
+    for record in manifest["documentation_changes"]:
+        copy = ROOT / record["pre_edit_copy"]
+        require(copy.is_file(), f"pre-edit copy is missing: {record['pre_edit_copy']}")
+        require(
+            sha256(copy) == record["pre_edit_runtime_sha256"],
+            f"pre-edit copy checksum differs: {record['runtime_path']}",
+        )
+        source = manifest["files"][record["runtime_path"]]
+        if source["transformation"] == "docstrings":
+            require(
+                git_blob_sha1(copy) == source["source_blob_sha1"],
+                f"pre-edit source blob identity differs: {record['runtime_path']}",
+            )
+
+
 def validate_canonical_data() -> None:
     """Hash the local split files, if present, against the reference manifest."""
     data_root = ROOT / "data/canonical"
@@ -289,6 +306,7 @@ def main() -> None:
     validate_front_end()
     validate_temporal_decoders()
     validate_accounting_corrections()
+    validate_documentation_changes()
     print("PASS: release grids, raw archives, audits, and hashes are consistent")
     validate_canonical_data()
 

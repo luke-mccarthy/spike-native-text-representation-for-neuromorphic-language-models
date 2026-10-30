@@ -27,6 +27,11 @@ path changes are listed in `source_manifest.json`, and the original versions
 of the two changed files are in `provenance/original_source/`. Model,
 training, metric and split code is unchanged.
 
+Docstrings and comments in four files were rewritten to describe the code;
+their executable statements are unchanged. The files are listed under
+`documentation_changes` in `source_manifest.json`, and the versions before
+the edit are in `provenance/pre_docstring_runtime/`.
+
 ## Decoder accounting correction
 
 In the output-head runs, layer 0 of the local decoder counted input synaptic
@@ -61,6 +66,14 @@ corrected archive adds the column `decoder_input_fanout_correction_version`.
 `validate_release.py` checks the hashes of both archives and of the original
 copies, and checks that the corrected archive has the same 162 runs in the same
 order with identical `test_bpb`.
+
+Padding convention: at the first padded position of a short patch, the
+dense decoder's first layer still receives the preceding byte's feedback
+code, whereas the TTFS decoder masks feedback with the next-position mask.
+The input-accumulation counters in both archives include this difference.
+It adds at most 16 dense-decoder input accumulations per short patch (two
+feedback spikes × eight outgoing synapses) and does not affect predictions
+at valid byte positions.
 
 ### Rerun check
 

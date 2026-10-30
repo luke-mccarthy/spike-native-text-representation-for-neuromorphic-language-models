@@ -133,8 +133,8 @@
     "src/models/local_spiking_patch_decoder.py": {
       "source_path": "src/models/spike_native_patch_lm_v2.py",
       "source_blob_sha1": "4fdd0aa4b68f102708889a9089b8765aa4e564a7",
-      "runtime_sha256": "6cf40c7a189af7e7edc8895b8b51d45824bb18fd00f2b48360e33c9971ea5dee",
-      "transformation": "semantic_path_and_public_identifiers_with_accounting_correction"
+      "runtime_sha256": "e6c8b9e445ba61b92259ca368713b1c1fabb7431a29afba2d67e067ab0cb59c9",
+      "transformation": "semantic_path_and_public_identifiers_with_accounting_correction_and_docstrings"
     },
     "src/models/spike_count_patch_decoder.py": {
       "source_path": "src/models/spike_native_patch_lm_v3.py",
@@ -169,8 +169,8 @@
     "src/models/spiking_lm_models.py": {
       "source_path": "src/models/spiking_lm_models.py",
       "source_blob_sha1": "e78136ec4227f4d1fe0911845241beee5e8855b1",
-      "runtime_sha256": "ddfc7fc030aae96776159b7e25774ecc1ebd901dd38017f398e4face18e15feb",
-      "transformation": "portability_guidance"
+      "runtime_sha256": "9c0c590ef5ca79a45b87b356bff2ac799f26ed347e990774dc914347d2c15d0f",
+      "transformation": "portability_guidance_and_docstrings"
     },
     "src/models/srwkv_operation_accounting.py": {
       "source_path": "src/models/srwkv_operation_accounting.py",
@@ -193,8 +193,8 @@
     "src/tokenizers/blt_patcher.py": {
       "source_path": "src/tokenizers/blt_patcher.py",
       "source_blob_sha1": "2227b8b1600f48540c7d75f39f6c44a87905828d",
-      "runtime_sha256": "e2b37313bd089c701522bc94ce3412fa4f1e82c7b8810e37049db22f0e1ae19e",
-      "transformation": "unchanged"
+      "runtime_sha256": "3ac5853de22fbcc64d01d9d876ce13a695ee7f01285de9b1b42b40eebd8574c9",
+      "transformation": "docstrings"
     },
     "src/tokenizers/gpt_neox_20b.py": {
       "source_path": "src/tokenizers/gpt_neox_20b.py",
@@ -223,8 +223,8 @@
     "src/tokenizers/spike_native_patch_frontends.py": {
       "source_path": "src/tokenizers/spike_native_patch_frontends.py",
       "source_blob_sha1": "8d3c2a5eacd81094ae8748d18a8e1189c88355cb",
-      "runtime_sha256": "4b6569c8c4e49479d5771b7c9d497da7c9d432ce14deed62dfb9411e96c65647",
-      "transformation": "unchanged"
+      "runtime_sha256": "74ac05a98e021155365a02ad1b036e8f4f533a56223a2a3213837e8df0feb0ee",
+      "transformation": "docstrings"
     },
     "src/tokenizers/spiking_blt_frontend.py": {
       "source_path": "src/tokenizers/spiking_blt_frontend.py",
@@ -286,6 +286,32 @@
       "pre_correction_copy": "provenance/pre_correction_runtime/src/models/event_accounted_wta_ttfs_decoder.py",
       "pre_correction_runtime_sha256": "294eb766962d1974f07702fbf672d55dc9cd1d64f52e4b9429e16d146e5a4c24",
       "affects": "output-head comparison accounting fields only; corrected archive in results/temporal_decoders_corrected/"
+    }
+  ],
+  "documentation_changes": [
+    {
+      "runtime_path": "src/models/local_spiking_patch_decoder.py",
+      "change": "Docstrings and comments rewritten to describe the code; executable statements unchanged.",
+      "pre_edit_copy": "provenance/pre_docstring_runtime/src/models/local_spiking_patch_decoder.py",
+      "pre_edit_runtime_sha256": "6cf40c7a189af7e7edc8895b8b51d45824bb18fd00f2b48360e33c9971ea5dee"
+    },
+    {
+      "runtime_path": "src/models/spiking_lm_models.py",
+      "change": "Docstrings and comments rewritten to describe the code; executable statements unchanged.",
+      "pre_edit_copy": "provenance/pre_docstring_runtime/src/models/spiking_lm_models.py",
+      "pre_edit_runtime_sha256": "ddfc7fc030aae96776159b7e25774ecc1ebd901dd38017f398e4face18e15feb"
+    },
+    {
+      "runtime_path": "src/tokenizers/blt_patcher.py",
+      "change": "Docstrings and comments rewritten to describe the code; executable statements unchanged.",
+      "pre_edit_copy": "provenance/pre_docstring_runtime/src/tokenizers/blt_patcher.py",
+      "pre_edit_runtime_sha256": "e2b37313bd089c701522bc94ce3412fa4f1e82c7b8810e37049db22f0e1ae19e"
+    },
+    {
+      "runtime_path": "src/tokenizers/spike_native_patch_frontends.py",
+      "change": "Docstrings and comments rewritten to describe the code; executable statements unchanged.",
+      "pre_edit_copy": "provenance/pre_docstring_runtime/src/tokenizers/spike_native_patch_frontends.py",
+      "pre_edit_runtime_sha256": "4b6569c8c4e49479d5771b7c9d497da7c9d432ce14deed62dfb9411e96c65647"
     }
   ]
 }

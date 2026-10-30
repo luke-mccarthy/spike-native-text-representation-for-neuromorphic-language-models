@@ -1,14 +1,5 @@
-"""
-Reusable spiking language model architectures.
-
-These models are intentionally tokenizer-agnostic. They accept either:
-  - input_ids: integer symbol IDs, e.g. char/byte/BPE/Unigram/spike-native IDs
-  - inputs_embeds: precomputed embeddings, e.g. future BLT-style patch embeddings
-
-The goal is to keep the model core compatible with future front ends:
-  - fixed vocabulary tokenizers
-  - byte/patch tokenizers
-  - spike-native tokenizer/front-end modules
+"""Spiking language-model architectures accepting integer symbol IDs
+or precomputed embeddings.
 """
 
 from __future__ import annotations
@@ -98,13 +89,7 @@ class SpikeInputEncoder(nn.Module):
 
 
 class SymbolEmbeddingMixin:
-    """
-    Shared helper for accepting either input_ids or inputs_embeds.
-
-    This is the key future-compatibility hook:
-      - input_ids for current tokenizers
-      - inputs_embeds for future BLT/spike-native front ends
-    """
+    """Shared helper accepting input_ids or precomputed inputs_embeds."""
 
     embedding: nn.Embedding
 

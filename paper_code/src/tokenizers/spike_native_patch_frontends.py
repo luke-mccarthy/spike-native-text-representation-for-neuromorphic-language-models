@@ -1,7 +1,6 @@
 """Byte-event SNN frontends for lossless patch language modelling.
 
-This module deliberately separates three things which earlier experiments
-conflated:
+This module separates three functions:
 
 * segmentation decides where a byte patch ends;
 * ``LosslessPatchCodec`` serialises that patch as a prediction target;

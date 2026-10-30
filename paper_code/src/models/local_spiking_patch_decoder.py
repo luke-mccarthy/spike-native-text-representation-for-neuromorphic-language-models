@@ -1,28 +1,7 @@
-"""Second-generation codec-free spike-native patch interface.
+"""Codec-free patch language model with a configurable local LIF decoder.
 
-This module extends ``src/models/spike_native_patch_lm.py`` (2026-07-23)
-along the first two of three directions identified from the audited
-90-row development archive at
-``docs/experiment_records/2026_07_23_scalable_patch_frontends_development``:
-
-1. The local byte decoder previously shared its hidden dimension and depth
-   (one LIF layer) with the shared global backbone, despite doing genuinely
-   new autoregressive work -- predicting up to eight bytes per patch -- that
-   the original SpikeGPT readout never performed. ``LocalByteLIFDecoder``
-   decouples ``decoder_hidden_dim`` and ``decoder_num_layers`` from the
-   global backbone entirely.
-2. Training-time knowledge distillation from a frozen, fully spiking
-   byte-rate teacher is supported (``src/models/patch_distillation.py``),
-   without adding any component to the deployed inference path: the teacher
-   is never invoked outside the training loop, and nothing about the
-   student's forward pass changes when distillation is disabled.
-
-The original v1 module is left completely unmodified so every row in the
-existing audited archive remains exactly reproducible from the commit that
-produced it. This module deliberately reuses v1's patch encoder,
-``PatchSequence``, and block-traversal helpers rather than duplicating them,
-since those components were not implicated by the development-archive
-findings.
+Provides sparse recurrent decoder layers with a dense 256-byte readout,
+reusing the positional patch encoder and SpikeGPT-style global core.
 """
 
 from __future__ import annotations
@@ -136,8 +115,7 @@ class LocalByteLIFDecoder(nn.Module):
     the global backbone and of each other. Layer 0 receives the masked
     patch context, the previous decoded byte's fixed injective code, and a
     one-hot within-patch position code; layers above 0 receive only the
-    previous layer's spikes, so added depth adds genuinely new recurrent
-    transformation rather than repeating the same input.
+    previous layer's spikes.
     """
 
     def __init__(
@@ -252,7 +230,7 @@ class LocalByteLIFDecoder(nn.Module):
         readout_accumulations = hidden_events * 256
         # Teacher-forcing signal events: the previous decoded byte's fixed
         # 2-of-32 code is presented at every position after the first
-        # active one in each patch, mirroring v1's accounting convention.
+        # active one in each patch, as in ``spike_native_patch_lm``.
         teacher_events = max(active_bytes - rows, 0) * 2
         self._last_stats = {
             "frontend_operation_ledger_version": PATCH_LEDGER_V2_VERSION,
