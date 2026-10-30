@@ -38,6 +38,10 @@ EXPECTED_HASHES = {
         "0dbbca1f66dfcce3e4809c260aac50e02e971bfdd4dfbbfd2b3faa3001b4ed54",
     "results/temporal_decoders/slurm_accounting.psv":
         "9f22c70eebf1ddc224bca223360ae0da50061eac3a7a6fe3efb88a1ef618d1d5",
+    "results/temporal_decoders_corrected/all_rows.csv":
+        "1b06148f9e8d39ad95916c496e96e28330fcb21c7e0b2cfbd14546c505b740e2",
+    "results/temporal_decoders_corrected/correction_audit.csv":
+        "b9ecb308c755906c6986665c41f268afa483993d9794b97877a0482ae622dc1b",
     "results/tokenizer_fits/audit.json":
         "278a49c7de36a53464a89469171f10b5f46c3e08732ab1dba268b3bacf6dc9f0",
     "results/tokenizer_fits/parts/text8_bpe16000.csv":
@@ -207,40 +211,48 @@ def validate_source_manifest() -> None:
             )
 
 
+def validate_accounting_corrections() -> None:
+    manifest = json.loads((ROOT / "docs/source_manifest.json").read_text())
+    for record in manifest["accounting_corrections"]:
+        copy = ROOT / record["pre_correction_copy"]
+        require(copy.is_file(), f"pre-correction copy is missing: {record['pre_correction_copy']}")
+        require(
+            sha256(copy) == record["pre_correction_runtime_sha256"],
+            f"pre-correction copy checksum differs: {record['runtime_path']}",
+        )
+    historical = csv_rows("results/temporal_decoders/all_rows.csv")
+    corrected = csv_rows("results/temporal_decoders_corrected/all_rows.csv")
+    require(len(corrected) == len(historical) == 162, "corrected decoder archive row count differs")
+    for old, new in zip(historical, corrected):
+        require(old["run_name"] == new["run_name"], "corrected decoder archive row order differs")
+        require(old["test_bpb"] == new["test_bpb"], "corrected decoder archive changed a BPB value")
+
+
 def validate_canonical_data() -> None:
-    """Compare local canonical data, if present, with the reference manifest."""
-    local_manifest_path = ROOT / "data/canonical/manifest.json"
-    if not local_manifest_path.is_file():
+    """Hash the local split files, if present, against the reference manifest."""
+    data_root = ROOT / "data/canonical"
+    if not (data_root / "manifest.json").is_file():
         print("SKIP: no local data/canonical/manifest.json")
         return
-    local_files = {
-        record["relative_path"]: record
-        for record in json.loads(local_manifest_path.read_text())["files"]
-    }
-    reference_files = {
-        record["relative_path"]: record
-        for record in json.loads(
-            (ROOT / "docs/canonical_file_manifest.json").read_text()
-        )["files"]
-    }
+    reference = json.loads(
+        (ROOT / "docs/canonical_file_manifest.json").read_text()
+    )["files"]
     mismatches = []
-    for relative_path, reference in reference_files.items():
-        local = local_files.get(relative_path)
-        if local is None:
-            mismatches.append(f"missing: {relative_path}")
-        elif local["sha256"] != reference["sha256"] or local["bytes"] != reference["bytes"]:
-            mismatches.append(
-                f"hash/byte mismatch: {relative_path} "
-                f"(local {local['bytes']} bytes / {local['sha256'][:12]}..., "
-                f"reference {reference['bytes']} bytes / {reference['sha256'][:12]}...)"
-            )
+    for record in reference:
+        relative = record["relative_path"]
+        path = data_root / relative
+        if not path.is_file():
+            mismatches.append(f"missing: {relative}")
+        elif path.stat().st_size != record["bytes"]:
+            mismatches.append(f"byte-count mismatch: {relative}")
+        elif sha256(path) != record["sha256"]:
+            mismatches.append(f"SHA-256 mismatch: {relative}")
     if mismatches:
-        detail = "\n  ".join(mismatches)
         raise AssertionError(
-            "Local canonical data does not match docs/canonical_file_manifest.json:\n  "
-            + detail
+            "Local canonical data differs from docs/canonical_file_manifest.json:\n  "
+            + "\n  ".join(mismatches)
         )
-    print(f"PASS: local canonical data matches docs/canonical_file_manifest.json for {len(reference_files)} files")
+    print(f"PASS: local split files match docs/canonical_file_manifest.json for {len(reference)} files")
 
 
 def validate_environment_evidence() -> None:
@@ -276,6 +288,7 @@ def main() -> None:
     validate_tokenizer_fits()
     validate_front_end()
     validate_temporal_decoders()
+    validate_accounting_corrections()
     print("PASS: release grids, raw archives, audits, and hashes are consistent")
     validate_canonical_data()
 

@@ -25,7 +25,39 @@ with the `SPIKE_TOKENIZER_CANONICAL_ROOT` and `SPIKE_TOKENIZER_FIT_ROOT`
 environment variables. Source-corpus paths are command-line arguments. These
 path changes are listed in `source_manifest.json`, and the original versions
 of the two changed files are in `provenance/original_source/`. Model,
-training, metric, split and accounting code is unchanged.
+training, metric and split code is unchanged.
+
+## Decoder accounting correction
+
+In the output-head runs, layer 0 of the local decoder counted input synaptic
+accumulations as (active inputs) × (mean fan-in per destination neuron). Each
+input channel has exactly 8 outgoing synapses, so the count should be
+(active inputs) × 8. The dense decoder also truncated the mean fan-in to an
+integer. Layer 1 of the two-layer decoder (128 → 128) has equal mean fan-in
+and fan-out and was counted correctly. The counter is detached from the
+computation graph, so training, BPB and every event count are unaffected.
+
+| File | Change | Original copy |
+|---|---|---|
+| `paper_code/src/models/local_spiking_patch_decoder.py` | Layer-0 input accumulations use the per-input fan-out (`input_mask.sum(dim=0)`) | `provenance/pre_correction_runtime/src/models/local_spiking_patch_decoder.py` |
+| `paper_code/src/models/event_accounted_wta_ttfs_decoder.py` | Same change in the TTFS decoder | `provenance/pre_correction_runtime/src/models/event_accounted_wta_ttfs_decoder.py` |
+
+`scripts/correct_decoder_fanout.py` applies the same correction to the
+recorded rows and recomputes the energy projection with
+`paper_code/src/energy/wta_event_energy_projection.py`. For one-layer
+decoders the corrected count is the recorded count × 8 / m₀, where m₀ is the
+recorded per-input multiplier. For two-layer decoders the layer-0 active-input
+total A₀ is rebuilt from the recorded context, feedback and position event
+counts, and (8 − m₀) × A₀ is added; A₀ is exact for fixed patches and uses the
+mean patch length of the shared segmentation for adaptive patches. The
+front-end comparison uses a different decoder whose count already used the
+configured fan-out, so its archive is unchanged.
+
+The recorded archive `results/temporal_decoders/` is kept unchanged. The
+corrected archive adds the column `decoder_input_fanout_correction_version`.
+`validate_release.py` checks the hashes of both archives and of the original
+copies, and checks that the corrected archive has the same 162 runs in the same
+order with identical `test_bpb`.
 
 The software environment was exported from the original Bunya Conda
 environment at development commit `e0e4b66faf8f47e19a62cbc43ee98e8066665418`.
@@ -42,8 +74,13 @@ are in `docs/bunya_environment.json`.
 | `results/temporal_decoders/all_rows.csv` | 162 | `70e64ea88cd49856572121cb7d8e67879a8e7de7c37d84c51523ab4abe5366c2` |
 | `results/temporal_decoders/audit.json` | — | `82495d4405905edeef5137b7aa4469f8ecabaac3f1e2c978eb68fb195e82eec6` |
 | `results/temporal_decoders/grid_manifest.json` | — | `40c4c5c171fbfa36a8996b533cb654e2f6bab573c3f0761d4b2931cf2f94dabb` |
+| `results/temporal_decoders_corrected/all_rows.csv` | 162 | `1b06148f9e8d39ad95916c496e96e28330fcb21c7e0b2cfbd14546c505b740e2` |
+| `results/temporal_decoders_corrected/correction_audit.csv` | 324 | `b9ecb308c755906c6986665c41f268afa483993d9794b97877a0482ae622dc1b` |
 
-The CSVs are the row-level outputs of the runs, unedited.
+The CSVs in `results/front_end/`, `results/tokenizer_fits/` and
+`results/temporal_decoders/` are the row-level outputs of the runs, unedited.
+`results/temporal_decoders_corrected/` is generated from
+`results/temporal_decoders/all_rows.csv` by `scripts/correct_decoder_fanout.py`.
 
 ## Contents
 

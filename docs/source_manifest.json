@@ -121,8 +121,8 @@
     "src/models/event_accounted_wta_ttfs_decoder.py": {
       "source_path": "src/models/spike_native_patch_lm_v9.py",
       "source_blob_sha1": "fa0d0589a255705254932a978ed872e2f630b27e",
-      "runtime_sha256": "294eb766962d1974f07702fbf672d55dc9cd1d64f52e4b9429e16d146e5a4c24",
-      "transformation": "semantic_path_and_public_identifiers"
+      "runtime_sha256": "73c922c4c3e051e07be7caba896a670346a99b148df92f4100560c25f9369b24",
+      "transformation": "semantic_path_and_public_identifiers_with_accounting_correction"
     },
     "src/models/hierarchical_ttfs_patch_decoder.py": {
       "source_path": "src/models/spike_native_patch_lm_v5.py",
@@ -133,8 +133,8 @@
     "src/models/local_spiking_patch_decoder.py": {
       "source_path": "src/models/spike_native_patch_lm_v2.py",
       "source_blob_sha1": "4fdd0aa4b68f102708889a9089b8765aa4e564a7",
-      "runtime_sha256": "56875f3c74c521aabfa1b698598d6be1c960660c448c962cf1410d0f81b3b0fd",
-      "transformation": "semantic_path_and_public_identifiers"
+      "runtime_sha256": "6cf40c7a189af7e7edc8895b8b51d45824bb18fd00f2b48360e33c9971ea5dee",
+      "transformation": "semantic_path_and_public_identifiers_with_accounting_correction"
     },
     "src/models/spike_count_patch_decoder.py": {
       "source_path": "src/models/spike_native_patch_lm_v3.py",
@@ -270,6 +270,22 @@
       "runtime_path": "src/models/spiking_lm_models.py",
       "source_path": "src/models/spiking_lm_models.py",
       "change": "Replace a private environment path in the missing-dependency message with public setup guidance."
+    }
+  ],
+  "accounting_corrections": [
+    {
+      "runtime_path": "src/models/local_spiking_patch_decoder.py",
+      "change": "Count layer input synaptic accumulations as the sum of outgoing fan-out over active input channels (input_mask.sum(dim=0)); previously active inputs x integer mean fan-in per destination neuron.",
+      "pre_correction_copy": "provenance/pre_correction_runtime/src/models/local_spiking_patch_decoder.py",
+      "pre_correction_runtime_sha256": "56875f3c74c521aabfa1b698598d6be1c960660c448c962cf1410d0f81b3b0fd",
+      "affects": "output-head comparison accounting fields only; corrected archive in results/temporal_decoders_corrected/"
+    },
+    {
+      "runtime_path": "src/models/event_accounted_wta_ttfs_decoder.py",
+      "change": "Count layer input synaptic accumulations as the sum of outgoing fan-out over active input channels (input_mask.sum(dim=0)); previously active inputs x mean fan-in per destination neuron.",
+      "pre_correction_copy": "provenance/pre_correction_runtime/src/models/event_accounted_wta_ttfs_decoder.py",
+      "pre_correction_runtime_sha256": "294eb766962d1974f07702fbf672d55dc9cd1d64f52e4b9429e16d146e5a4c24",
+      "affects": "output-head comparison accounting fields only; corrected archive in results/temporal_decoders_corrected/"
     }
   ]
 }

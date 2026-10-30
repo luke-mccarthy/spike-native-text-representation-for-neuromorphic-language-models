@@ -18,10 +18,14 @@ docs/                     Dataset, environment and provenance documentation
 results/
   front_end/              Front-end comparison: 90 rows
   tokenizer_fits/         SentencePiece fits: 9 rows
-  temporal_decoders/      Output-head comparison: 162 rows
-scripts/                  Integrity validator, TinyStories tools, figure script
+  temporal_decoders/      Output-head comparison: 162 rows, as recorded
+  temporal_decoders_corrected/
+                          Output-head comparison with corrected decoder
+                          input accumulations and energy: 162 rows
+scripts/                  Integrity validator, TinyStories tools, decoder
+                          accounting correction, figure script
 paper_code/               Model, training, evaluation and accounting code
-provenance/               Original copies of the two files changed for portability
+provenance/               Original copies of the files changed after the runs
 tests/                    Integrity tests
 environment.yml           Pinned software environment
 environment-lock.yml      Full export of the original HPC environment (Linux-64)
@@ -42,9 +46,10 @@ for every file are listed in [docs/SOURCE_MAPPING.md](docs/SOURCE_MAPPING.md).
 | Byte spike codes (1-of-256, 2-of-32, recurrent-LIF state with injective suffix) | `paper_code/src/models/spike_input_interfaces.py` |
 | Injective constant-weight codes used by the byte and patch front-ends | `paper_code/src/tokenizers/lossless_codecs.py` |
 | Patch front-ends (fixed 4- and 8-byte, adaptive 8-byte with homeostatic boundary) and local LIF decoder with dense 256-way readout | `paper_code/src/models/spike_native_patch_lm.py`, `paper_code/src/models/local_spiking_patch_decoder.py`, `paper_code/src/models/spike_count_patch_decoder.py`, `paper_code/src/tokenizers/spike_native_patch_frontends.py` |
-| TTFS output heads (direct 256-neuron race, 2 × 16-neuron nibble race) | `paper_code/src/models/audited_ttfs_patch_decoder.py`, which builds on `hierarchical_ttfs_patch_decoder.py`, `strict_ttfs_patch_decoder.py`, `continuous_wta_ttfs_decoder.py` and `event_accounted_wta_ttfs_decoder.py` in the same folder |
+| TTFS output heads (direct 256-neuron race, 2 × 16-neuron nibble race) | `paper_code/src/models/event_accounted_wta_ttfs_decoder.py` (`EventAccountedWTATTFSPatchLanguageModel`), which subclasses `continuous_wta_ttfs_decoder.py`, `audited_ttfs_patch_decoder.py` and `strict_ttfs_patch_decoder.py` in the same folder; `paper_code/scripts/run_temporal_decoder_comparison.py` substitutes it for the model class in `train_ttfs_decoder.py` |
 | Operation counts and energy projection (dense MACs, synaptic operations, state updates, routed spikes; low, central and high coefficients) | `paper_code/src/energy/analytical_compute.py`, `frontend_energy_projection.py`, `frontend_memory.py`, `scalable_patch_projection.py`, `wta_event_energy_projection.py`, `paper_code/src/models/spikegpt_operation_accounting.py` |
 | Dataset splitting and split-hash checks | `paper_code/scripts/prepare_canonical_splits.py`, `paper_code/src/canonical_data_contract.py` |
+| Decoder input-accumulation correction applied to the output-head archive | `scripts/correct_decoder_fanout.py` |
 | Per-run entry points | `paper_code/scripts/train_frontend_language_model.py` (subword, hybrid and byte runs), `paper_code/scripts/train_patch_language_model.py` (patch runs), `paper_code/scripts/run_temporal_decoder_comparison.py` with `train_ttfs_decoder.py` (output-head runs) |
 
 `paper_code/src/tokenizers/blt_patcher.py`, `spiking_blt_frontend.py` and
@@ -157,9 +162,27 @@ done
 Rows are one-indexed and correspond to the rows of the CSV grids in
 `configs/`.
 
-### 7. Generate the figures
+### 7. Apply the decoder accounting correction
 
-The figure script reads the committed CSVs in `results/`, so it needs no new
+The recorded output-head rows counted layer-0 decoder input accumulations
+with the mean fan-in per destination neuron instead of the fan-out of 8 per
+active input. The counters in `paper_code/` now count the fan-out, so new
+runs produce corrected values directly. For the recorded rows:
+
+```bash
+python reproduce.py validate          # checks results/temporal_decoders_corrected/
+python scripts/correct_decoder_fanout.py   # rebuilds it from results/temporal_decoders/
+```
+
+The script changes only the decoder input-accumulation fields and the energy,
+traffic and synaptic-operation fields derived from them; BPB is unchanged.
+`correction_audit.csv` lists the recorded and corrected count for every row
+and phase. Details are in [docs/PROVENANCE.md](docs/PROVENANCE.md).
+
+### 8. Generate the figures
+
+The figure script reads the committed CSVs in `results/` (the output-head
+figure uses `results/temporal_decoders_corrected/`), so it needs no new
 runs:
 
 ```bash
@@ -175,13 +198,13 @@ It writes three PDFs:
 | `quality_energy_frontier.pdf` | Test BPB against projected central training energy per raw byte, per dataset |
 | `ttfs_paired_tradeoffs.pdf` | Paired change in test BPB and projected energy for the TTFS heads against the dense head, per dataset |
 
-### 8. Compare new runs with the reported results
+### 9. Compare new runs with the reported results
 
 New rows are written to `outputs/front_end` and `outputs/temporal_decoders`;
 the files in `results/` are left untouched. Match each new row to the row with
 the same `run_name` in `results/front_end/all_rows.csv` or
-`results/temporal_decoders/all_rows.csv` and compare `test_bpb` and the energy
-columns. Floating-point results can differ in the last decimal places across
+`results/temporal_decoders_corrected/all_rows.csv` and compare `test_bpb` and
+the energy columns. Floating-point results can differ in the last decimal places across
 CPU types and BLAS libraries; timing fields depend on the host.
 
 ## Software environment

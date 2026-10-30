@@ -212,8 +212,8 @@ class LocalByteLIFDecoder(nn.Module):
         input_accumulations = 0
         recurrent_accumulations = 0
         layer_input_fanout = [
-            layer.input_mask.sum(dim=1) for layer in self.layers
-        ]  # per-neuron fan-in from the layer's input vector
+            layer.input_mask.sum(dim=0) for layer in self.layers
+        ]  # outgoing synapses per input channel
         layer_recurrent_fanout = [layer.recurrent_mask.sum(dim=0) for layer in self.layers]
         for position in range(self.max_patch_bytes):
             active = flattened_mask[:, position].to(flattened_context.dtype).unsqueeze(1)
@@ -228,9 +228,11 @@ class LocalByteLIFDecoder(nn.Module):
                 # Event-driven accumulation counts: one accumulate per active
                 # input channel per destination neuron it fans out to, and
                 # likewise for the previous step's recurrent spikes.
-                active_inputs = int((layer_input.detach() != 0).sum(dim=-1).sum().item())
-                input_accumulations += active_inputs * int(
-                    layer_input_fanout[layer_index].mean().item()
+                input_accumulations += int(
+                    (
+                        (layer_input.detach() != 0).to(layer_input_fanout[layer_index].dtype)
+                        * layer_input_fanout[layer_index]
+                    ).sum().item()
                 )
                 recurrent_accumulations += int(
                     (previous_spikes.detach().sum(dim=-1) * layer_recurrent_fanout[layer_index].mean()).sum().item()

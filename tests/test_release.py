@@ -1,4 +1,5 @@
 from scripts.validate_release import (
+    validate_accounting_corrections,
     validate_environment_evidence,
     validate_front_end,
     validate_hashes,
@@ -30,3 +31,7 @@ def test_temporal_decoder_archive() -> None:
 
 def test_tokenizer_fit_archive() -> None:
     validate_tokenizer_fits()
+
+
+def test_accounting_corrections() -> None:
+    validate_accounting_corrections()
