@@ -1,17 +1,14 @@
 # Execution environment
 
-The reported factorials were run as independent CPU tasks on the Bunya HPC
-system. The experiment code explicitly:
+The reported runs were independent CPU tasks on the Bunya HPC system
+(University of Queensland). The experiment code:
 
-- selected `torch.device("cpu")`;
-- set `torch.set_num_threads(1)`;
-- used one OpenMP thread and one MKL thread per task for the temporal-decoder
-  factorial;
-- used seeds 1, 2, and 3 as declared in the frozen grids.
+- selects `torch.device("cpu")`;
+- sets `torch.set_num_threads(1)`;
+- uses one OpenMP thread and one MKL thread per task in the output-head runs;
+- uses seeds 1, 2 and 3, as listed in the grids.
 
-The row ledgers and the post-experiment Bunya environment capture record:
-
-| Component | Recorded value |
+| Component | Version |
 |---|---|
 | Python | 3.10.20 |
 | NumPy | 2.2.6 |
@@ -22,24 +19,17 @@ The row ledgers and the post-experiment Bunya environment capture record:
 | OpenMP threads | 1 |
 | MKL threads | 1 |
 
-The CUDA-tagged PyTorch build was installed in the HPC environment, but these
-reference implementations executed on CPU. `environment.yml` pins the
-cross-platform package versions needed by the code; a CUDA build is not
-required for the recorded CPU execution path.
+The installed PyTorch build included CUDA support; all models ran on CPU, so
+a CPU-only PyTorch 2.11.0 build is sufficient. `environment.yml` pins the
+package versions above.
 
-The environment was captured from the original Bunya Conda environment after
-the reported experiments. Direct imports confirmed NumPy 2.2.6,
-SentencePiece 0.2.1, snnTorch 0.9.4, and PyTorch 2.11.0+cu126. `pip check`
-reported no broken requirements. Pytest was not installed in the experimental
-environment; it is available only through the optional `test` dependency in
-`pyproject.toml`.
+The environment was exported from the original Bunya Conda environment after
+the runs. Direct imports confirmed the versions in the table, and `pip check`
+reported no broken requirements. `environment-lock.yml` is the full Linux-64
+export with local paths removed; it keeps Conda build strings and CUDA
+packages and is specific to Linux-64. `docs/bunya_environment.json` records
+the export's source revision and checksums.
 
-`environment-lock.yml` is a sanitised, path-independent copy of the full
-Linux-64 Bunya export. It retains Conda build strings and CUDA package pins, so
-it is archival rather than cross-platform. Use `environment.yml` for a compact
-portable setup. The exact evidence location, source revision, and checksums are
-recorded in `bunya_environment.json`.
-
-The archived records do not identify a CPU microarchitecture, so this
-repository does not claim one. Wall-clock and process-time fields can vary by
-host even when deterministic model and metric values reproduce.
+`pytest` is an optional test dependency (`pip install .[test]`). The archived
+records do not include the CPU model. Wall-clock and CPU-time fields depend on
+the host.

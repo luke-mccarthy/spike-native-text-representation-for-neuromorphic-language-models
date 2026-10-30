@@ -208,13 +208,10 @@ def validate_source_manifest() -> None:
 
 
 def validate_canonical_data() -> None:
-    """If local canonical data has been prepared, check it against the
-    committed reference manifest. This is a no-op (prints a note and returns)
-    when no local canonical data exists, so it never fails CI or a fresh
-    checkout that has not run `reproduce.py prepare-data` yet."""
+    """Compare local canonical data, if present, with the reference manifest."""
     local_manifest_path = ROOT / "data/canonical/manifest.json"
     if not local_manifest_path.is_file():
-        print("SKIP: no local data/canonical/manifest.json found (run `python reproduce.py prepare-data` first)")
+        print("SKIP: no local data/canonical/manifest.json")
         return
     local_files = {
         record["relative_path"]: record

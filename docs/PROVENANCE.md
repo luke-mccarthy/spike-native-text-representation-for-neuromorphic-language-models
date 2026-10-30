@@ -1,9 +1,10 @@
 # Provenance
 
-This repository is a curated reproduction artifact derived from the private
-experimental repository `luke-mccarthy/spike-tokenizer-snn`.
+The code and results in this repository were taken from the authors'
+development repository `luke-mccarthy/spike-tokenizer-snn` at the commits
+below.
 
-## Frozen evidence
+## Source commits
 
 | Artifact | Source commit |
 |---|---|
@@ -13,27 +14,23 @@ experimental repository `luke-mccarthy/spike-tokenizer-snn`.
 | Temporal-decoder publication archive | `e0e4b66faf8f47e19a62cbc43ee98e8066665418` |
 | Bunya environment evidence | `714d90b7f62e637c6f4682ded1ed55a2ab796fc5` |
 
-The front-end files required at the earlier source commit have the same Git
-blob identities at the temporal-decoder commit. The artifact therefore uses
-one deduplicated `paper_code/` tree, with the later decoder-only files added.
-The public runtime uses descriptive filenames and identifiers. Original
-development paths and exact Git blob identities are retained in
-`source_manifest.json`, with a human-readable summary in `SOURCE_MAPPING.md`.
-The public entry point is `reproduce.py`.
+The front-end files used at the front-end commit have the same Git blob
+identities at the temporal-decoder commit, so `paper_code/` is a single tree
+containing both sets of files. Files carry descriptive names; their original
+development paths and Git blob identities are in `source_manifest.json` and
+summarised in `SOURCE_MAPPING.md`. The entry point is `reproduce.py`.
 
-Public entry scripts use project-relative defaults and
-`SPIKE_TOKENIZER_CANONICAL_ROOT`/`SPIKE_TOKENIZER_FIT_ROOT` overrides instead
-of private Bunya paths. Source-corpus paths are explicit command-line
-arguments. The exact portability changes are enumerated in
-`source_manifest.json`; unmodified copies of the two initially patched sources
-are retained under `provenance/original_source/`. No model, training, metric,
-split, or accounting operation was changed.
+Entry scripts use project-relative default paths, which can be overridden
+with the `SPIKE_TOKENIZER_CANONICAL_ROOT` and `SPIKE_TOKENIZER_FIT_ROOT`
+environment variables. Source-corpus paths are command-line arguments. These
+path changes are listed in `source_manifest.json`, and the original versions
+of the two changed files are in `provenance/original_source/`. Model,
+training, metric, split and accounting code is unchanged.
 
-The software evidence was captured from the original Bunya Conda environment
-at development commit `e0e4b66faf8f47e19a62cbc43ee98e8066665418`. The
-sanitised full export is `environment-lock.yml`; exact evidence checksums and
-the development-repository location are recorded in
-`docs/bunya_environment.json`.
+The software environment was exported from the original Bunya Conda
+environment at development commit `e0e4b66faf8f47e19a62cbc43ee98e8066665418`.
+The full export is `environment-lock.yml`; its checksums and source location
+are in `docs/bunya_environment.json`.
 
 ## Included raw archives
 
@@ -46,12 +43,11 @@ the development-repository location are recorded in
 | `results/temporal_decoders/audit.json` | — | `82495d4405905edeef5137b7aa4469f8ecabaac3f1e2c978eb68fb195e82eec6` |
 | `results/temporal_decoders/grid_manifest.json` | — | `40c4c5c171fbfa36a8996b533cb654e2f6bab573c3f0761d4b2931cf2f94dabb` |
 
-The CSVs are unchanged row-level outputs. No values are hand-copied into this
-repository and no result interpretation is included.
+The CSVs are the row-level outputs of the runs, unedited.
 
-## Inclusion rule
+## Contents
 
-Only files required to:
+The repository contains the files required to:
 
 1. construct and verify canonical splits;
 2. fit required tokenizer artifacts;
@@ -59,5 +55,5 @@ Only files required to:
 4. calculate the recorded metrics and analytical accounting fields; and
 5. validate the raw archives
 
-are included. Scheduler troubleshooting, superseded prototypes, exploratory
-results, manuscript files, and later unreported experiments are excluded.
+Exploratory runs, superseded prototypes, scheduler scripts and manuscript
+files are not included.
