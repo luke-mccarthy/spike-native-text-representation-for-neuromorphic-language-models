@@ -1,12 +1,10 @@
-# Public source names and development provenance
+# File names and development paths
 
-The public runtime uses descriptive filenames. Dates and internal iteration
-suffixes are retained only in provenance metadata because they describe the
-development history rather than a reader-facing function. The exact source
-blob and runtime SHA-256 for every included file are recorded in
-`source_manifest.json`.
+Files in `paper_code/` carry descriptive names. The table lists each renamed
+file with its original development path. The source Git blob and SHA-256 of
+every file are in `source_manifest.json`.
 
-| Public runtime path | Original development path |
+| Path in this repository | Original development path |
 |---|---|
 | `paper_code/scripts/audit_frontend_representations.py` | `scripts/audit_2026_07_16_canonical_frontend_representations.py` |
 | `paper_code/scripts/build_frontend_grids.py` | `scripts/make_2026_07_22_decisive_frontend_grids.py` |
@@ -30,7 +28,6 @@ blob and runtime SHA-256 for every included file are recorded in
 | `paper_code/src/models/event_accounted_wta_ttfs_decoder.py` | `src/models/spike_native_patch_lm_v9.py` |
 | `paper_code/src/models/strict_spiking_backbones.py` | `src/models/strict_spiking_backbones_v2.py` |
 
-The remaining runtime files already had descriptive names and retain their
-original paths. Renaming does not alter raw configuration fields, protocol
-identifiers, run names, or result records; those values remain byte-for-byte
-identical to the frozen evidence.
+All other files keep their original paths. Configuration fields, protocol
+identifiers, run names and result records use the original names and are
+byte-for-byte identical to the development records.

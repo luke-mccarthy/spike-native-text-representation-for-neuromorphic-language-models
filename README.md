@@ -1,76 +1,57 @@
 # Spike-Native Text Representation for Neuromorphic Language Models
 
-Reproduction code, frozen configurations, and raw result records for the paper
-*Spike-Native Text Representation for Neuromorphic Language Models*.
+Code, experiment grids and raw results for the paper *Spike-Native Text
+Representation for Neuromorphic Language Models*. The repository contains:
 
-This repository is a compact paper artifact. It contains only:
-
-- the model, text-representation, training, evaluation, and accounting code
-  needed by the reported experiments;
-- the immutable experiment grids used to launch the reported rows;
-- the raw row-level CSV outputs and machine-readable audit records;
-- the canonical dataset-split builder and exact file hashes;
-- a pinned software environment and lightweight integrity tests.
-
-It is not the development repository and is not intended for new experiment
-design. New trials belong in a separate experimental repository. This artifact
-should remain a frozen, reviewable implementation of the paper experiments.
+- the model, front-end, training, evaluation and energy-accounting code used
+  by the reported experiments;
+- the experiment grids that define every reported run;
+- the row-level CSV outputs and audit records of those runs;
+- the dataset-split builder and the SHA-256 hashes of every split file;
+- a pinned software environment, an integrity validator and the figure script.
 
 ## Repository layout
 
 ```text
-configs/                  Frozen paper experiment grids
-docs/                     Dataset, environment, and provenance documentation
+configs/                  Experiment grids (one row per run)
+docs/                     Dataset, environment and provenance documentation
 results/
-  front_end/              Raw 90-row front-end comparison
-  tokenizer_fits/         Raw 9-row tokenizer-fit records and audit
-  temporal_decoders/      Raw 162-row decoder factorial
-scripts/                  Release-integrity utilities and figure generation
-paper_code/               Curated paper runtime with descriptive public names
-provenance/               Unmodified originals of portability-patched files
-tests/                    Release-integrity tests
-environment.yml           Portable pinned runtime environment
-environment-lock.yml      Archived full environment export
-reproduce.py              Friendly single-row reproduction interface
+  front_end/              Front-end comparison: 90 rows
+  tokenizer_fits/         SentencePiece fits: 9 rows
+  temporal_decoders/      Output-head comparison: 162 rows
+scripts/                  Integrity validator, TinyStories tools, figure script
+paper_code/               Model, training, evaluation and accounting code
+provenance/               Original copies of the two files changed for portability
+tests/                    Integrity tests
+environment.yml           Pinned software environment
+environment-lock.yml      Full export of the original HPC environment (Linux-64)
+reproduce.py              Command-line entry point
 ```
 
-The files under `results/` are raw experimental records. This repository does
-not provide a narrative interpretation of those values.
+## Code map
 
-## Code map: networks, front-ends, and decoders
+The pipeline runs raw bytes → front-end units or spikes → SpikeGPT-style
+global core → local or terminal decoder → p(byte). Original development paths
+for every file are listed in [docs/SOURCE_MAPPING.md](docs/SOURCE_MAPPING.md).
 
-The paper decomposes the pipeline into four stages (raw bytes -> front-end
-units/spikes -> SpikeGPT-like global core -> local/terminal decoder ->
-p(byte)). The table below points at where each stage actually lives, so you
-do not have to guess from file names alone. Exact original (private-repo)
-paths for every file are in [docs/SOURCE_MAPPING.md](docs/SOURCE_MAPPING.md).
-
-| Paper concept | Primary file(s) |
+| Component | File(s) |
 |---|---|
-| SpikeGPT-like global backbone (RWKV time-mix/channel-mix, WKV recurrence, sequence LIF neuron, ATan surrogate) | `paper_code/src/models/spikegpt_reference.py` |
-| Conventional BPE/Unigram subword front-end (token ID -> learned binary embedding) | `paper_code/src/models/spike_input_interfaces.py`, `paper_code/scripts/fit_sentencepiece_tokenizer.py` |
-| Predictive spike-boundary + digital-codec hybrid front-end | `paper_code/src/tokenizers/spike_boundary_native_levels.py`, `spike_boundary_refined.py` |
-| Codec-free byte spike codes (1-of-256, 2-of-32, recurrent-LIF reservoir + injective suffix) | `paper_code/src/models/spike_input_interfaces.py` |
-| Injective/constant-weight codes shared across byte and patch front-ends | `paper_code/src/tokenizers/lossless_codecs.py` |
-| Codec-free positional patch front-ends (fixed patch-4/8, adaptive patch-8, homeostatic boundary rule) + local LIF decoder with dense 256-way readout | `paper_code/src/models/spike_native_patch_lm.py`, `local_spiking_patch_decoder.py`, `spike_count_patch_decoder.py`, `paper_code/src/tokenizers/spike_native_patch_frontends.py` |
-| Strict TTFS output heads (direct 256-neuron race, factorised 2x16-neuron nibble race) | `paper_code/src/models/hierarchical_ttfs_patch_decoder.py`, `strict_ttfs_patch_decoder.py`, `continuous_wta_ttfs_decoder.py`, `event_accounted_wta_ttfs_decoder.py`, `audited_ttfs_patch_decoder.py` (later files in this list are additive refinements of the earlier ones; `audited_ttfs_patch_decoder.py` is what produced the reported paired-decoder results) |
-| Operation/energy ledgers (dense MACs, SynOps, state updates, routed spikes, low/central/high coefficients) | `paper_code/src/energy/analytical_compute.py`, `frontend_energy_projection.py`, `frontend_memory.py`, `scalable_patch_projection.py`, `wta_event_energy_projection.py`, plus `paper_code/src/models/spikegpt_operation_accounting.py` |
-| Canonical dataset splitting and the fail-closed data contract | `paper_code/src/canonical_data_contract.py`, `paper_code/scripts/prepare_canonical_splits.py` |
-| Per-row training/evaluation entry points | `paper_code/scripts/train_frontend_language_model.py` (subword/boundary/byte rows), `train_patch_language_model.py` (patch rows, the front-end quality/energy results), `train_ttfs_decoder.py` + `run_temporal_decoder_comparison.py` (the paired output-decoder results) |
+| SpikeGPT-style global core (RWKV time and channel mixing, WKV recurrence, LIF neurons, arctangent surrogate) | `paper_code/src/models/spikegpt_reference.py` |
+| Subword front-ends (BPE/Unigram token ID → learned binary embedding) | `paper_code/src/models/spike_input_interfaces.py`, `paper_code/scripts/fit_sentencepiece_tokenizer.py` |
+| Spiking-boundary/digital-codec hybrid front-end | `paper_code/src/tokenizers/spike_boundary_native_levels.py`, `paper_code/src/tokenizers/spike_boundary_refined.py` |
+| Byte spike codes (1-of-256, 2-of-32, recurrent-LIF state with injective suffix) | `paper_code/src/models/spike_input_interfaces.py` |
+| Injective constant-weight codes used by the byte and patch front-ends | `paper_code/src/tokenizers/lossless_codecs.py` |
+| Patch front-ends (fixed 4- and 8-byte, adaptive 8-byte with homeostatic boundary) and local LIF decoder with dense 256-way readout | `paper_code/src/models/spike_native_patch_lm.py`, `paper_code/src/models/local_spiking_patch_decoder.py`, `paper_code/src/models/spike_count_patch_decoder.py`, `paper_code/src/tokenizers/spike_native_patch_frontends.py` |
+| TTFS output heads (direct 256-neuron race, 2 × 16-neuron nibble race) | `paper_code/src/models/audited_ttfs_patch_decoder.py`, which builds on `hierarchical_ttfs_patch_decoder.py`, `strict_ttfs_patch_decoder.py`, `continuous_wta_ttfs_decoder.py` and `event_accounted_wta_ttfs_decoder.py` in the same folder |
+| Operation counts and energy projection (dense MACs, synaptic operations, state updates, routed spikes; low, central and high coefficients) | `paper_code/src/energy/analytical_compute.py`, `frontend_energy_projection.py`, `frontend_memory.py`, `scalable_patch_projection.py`, `wta_event_energy_projection.py`, `paper_code/src/models/spikegpt_operation_accounting.py` |
+| Dataset splitting and split-hash checks | `paper_code/scripts/prepare_canonical_splits.py`, `paper_code/src/canonical_data_contract.py` |
+| Per-run entry points | `paper_code/scripts/train_frontend_language_model.py` (subword, hybrid and byte runs), `paper_code/scripts/train_patch_language_model.py` (patch runs), `paper_code/scripts/run_temporal_decoder_comparison.py` with `train_ttfs_decoder.py` (output-head runs) |
 
-`paper_code/src/tokenizers/blt_patcher.py`, `spiking_blt_frontend.py`, and
-`gpt_neox_20b.py` are supporting infrastructure exercised during development
-(BLT-style and GPT-NeoX-tokenizer comparisons) rather than one of the
-front-end families reported in the paper; they are included because the
-frozen front-end commit imports them.
+`paper_code/src/tokenizers/blt_patcher.py`, `spiking_blt_frontend.py` and
+`gpt_neox_20b.py` are imported by the front-end code; the reported runs do not
+use them.
 
-Table/figure numbers are intentionally omitted from this README, since the
-manuscript is still under revision and numbering moves between drafts. See
-the current manuscript itself for exact table/figure numbers, and match
-results by content (front-end quality, energy summary, paired decoder
-comparison, etc.) rather than by number.
-
-## Setup and full reproduction walkthrough
+## Reproducing the results
 
 ### 1. Install the environment
 
@@ -80,31 +61,29 @@ conda activate spike-native-text
 python reproduce.py validate
 ```
 
-`validate` checks the committed raw archives, hashes, and provenance records
-only; it does not require any dataset and always works on a fresh checkout.
+`validate` checks the experiment grids, raw result archives, audit records and
+code checksums. It needs no datasets.
 
-### 2. Obtain the three source corpora
+### 2. Obtain the three corpora
 
-This repository does not redistribute dataset payloads (see
-[docs/DATASETS.md](docs/DATASETS.md) for exact requirements and licensing).
-You need, locally:
+The datasets are not redistributed here. Formats and split rules are in
+[docs/DATASETS.md](docs/DATASETS.md). Three inputs are needed:
 
-- **Text8**: the standard 100,000,000-byte `text8` corpus.
-- **WikiText-2**: the official `wiki.train.tokens` / `wiki.valid.tokens` /
+- **Text8:** the 100,000,000-byte `text8` file.
+- **WikiText-2:** the official `wiki.train.tokens`, `wiki.valid.tokens` and
   `wiki.test.tokens` files.
-- **TinyStories-5000**: a 5,000-story, `<|endoftext|>`-delimited file. Build
-  it with:
+- **TinyStories-5000:** the first 5,000 stories of the `roneneldan/TinyStories`
+  training split, built with:
 
   ```bash
   pip install datasets
   python scripts/fetch_tinystories_5000.py --output data/sources/tinystories_5000.txt
   ```
 
-  This is confirmed byte-for-byte identical to the original source file used
-  by the study (see [docs/DATASETS.md](docs/DATASETS.md) for the reference
-  SHA-256 and how to check it).
+  The script compares its output with the SHA-256 of the file used in the
+  paper and prints PASS or FAIL.
 
-### 3. Build the canonical, hash-verified splits
+### 3. Build the dataset splits
 
 ```bash
 python reproduce.py prepare-data \
@@ -118,15 +97,13 @@ python reproduce.py prepare-data \
 python reproduce.py validate
 ```
 
-The second `validate` call now also compares your local
-`data/canonical/manifest.json` against the paper's recorded
-`docs/canonical_file_manifest.json` (byte counts and SHA-256 per file) and
-fails loudly if anything differs, so you know immediately whether your local
-data matches the paper's before spending compute on training.
+Once `data/canonical/manifest.json` exists, `validate` also compares the byte
+count and SHA-256 of every split file with
+`docs/canonical_file_manifest.json` and stops with an error on any mismatch.
 
-### 4. Fit the conventional tokenizers
+### 4. Fit the SentencePiece tokenisers
 
-Nine rows (BPE-8k, BPE-16k, Unigram-4k x 3 datasets):
+Nine rows: BPE-8k, BPE-16k and Unigram-4k for each of the three datasets.
 
 ```bash
 for row in $(seq 1 9); do
@@ -137,28 +114,16 @@ for row in $(seq 1 9); do
 done
 ```
 
-### 5. Run the front-end comparison (predictive quality and projected energy)
+### 5. Run the front-end comparison
 
-Inspect one row without running it:
+90 rows: 10 front-ends × 3 datasets × 3 seeds. Show the command for one row
+without running it:
 
 ```bash
 python reproduce.py front-end --row 1 --dry-run
 ```
 
-Run one row:
-
-```bash
-python reproduce.py front-end \
-  --row 1 \
-  --data-root data/canonical \
-  --tokenizer-root tokenizers/fitted \
-  --output-root outputs/front_end
-```
-
-Run the full 90-row factorial (10 front-ends x 3 datasets x 3 seeds; this
-trains a small model per row and was originally run as 90 independent
-one-CPU-thread HPC tasks, so budget CPU time accordingly and prefer
-distributing rows across a scheduler over a serial loop):
+Run all rows:
 
 ```bash
 for row in $(seq 1 90); do
@@ -170,7 +135,13 @@ for row in $(seq 1 90); do
 done
 ```
 
-### 6. Run the temporal-decoder (TTFS) comparison (paired output-decoder results)
+Each row trains one model on one CPU thread. The reported rows were run as 90
+independent single-thread tasks on an HPC scheduler.
+
+### 6. Run the output-head comparison
+
+162 rows: 3 patch architectures × 3 output heads (dense, direct TTFS, nibble
+TTFS) × 2 decoder capacities × 3 datasets × 3 seeds.
 
 ```bash
 python reproduce.py temporal-decoder --row 1 --dry-run
@@ -183,80 +154,52 @@ for row in $(seq 1 162); do
 done
 ```
 
-162 rows = 3 patch architectures x 3 output heads (dense reference, direct
-TTFS, nibble TTFS) x 2 decoder capacities (matched, enlarged) x 3 datasets x
-3 seeds.
+Rows are one-indexed and correspond to the rows of the CSV grids in
+`configs/`.
 
-### 7. Regenerate the paper's figures
+### 7. Generate the figures
 
-No new experiment runs required; this reads directly from the committed raw
-CSVs (`results/front_end/all_rows.csv`, `results/temporal_decoders/all_rows.csv`):
+The figure script reads the committed CSVs in `results/`, so it needs no new
+runs:
 
 ```bash
+pip install matplotlib==3.11.2
 python scripts/make_figures.py --output-dir outputs/figures
 ```
 
-This writes six PNG files to the output directory. The filenames are
-generated by this script for its own bookkeeping and do not track the
-manuscript's own figure numbers (which move between drafts); match figures to
-the manuscript by content, not by filename:
+It writes three PDFs:
 
-- front-end predictive quality across methods and datasets
-- predictive quality versus temporal compression (bytes per global step)
-- predictive quality versus projected energy (the quality-energy frontier)
-- TTFS output-head operating points (quality versus energy)
-- TTFS output-head paired quality/energy trade-offs versus the dense readout
-- a supplementary sensitivity chart, not in the manuscript, showing how the
-  headline energy-reduction percentages move under the low/central/high
-  energy-coefficient scenarios described in the Methods (the manuscript's own
-  tables and figures only ever plot the central scenario)
+| File | Content |
+|---|---|
+| `rate_quality_tradeoff.pdf` | Test BPB against raw bytes per global recurrent step, per dataset |
+| `quality_energy_frontier.pdf` | Test BPB against projected central training energy per raw byte, per dataset |
+| `ttfs_paired_tradeoffs.pdf` | Paired change in test BPB and projected energy for the TTFS heads against the dense head, per dataset |
 
-### 8. Compare your own runs against the reported results
+### 8. Compare new runs with the reported results
 
-Your freshly generated rows land in `outputs/front_end` and
-`outputs/temporal_decoders`, separate from the committed `results/` archives
-(which are frozen and never overwritten). Compare a run's `test_bpb` /
-`bits_per_raw_byte` and energy columns against the matching row in
-`results/front_end/all_rows.csv` or `results/temporal_decoders/all_rows.csv`
-to check reproduction. Exact bit-for-bit reproduction of every decimal is not
-expected across hardware/BLAS versions; large deviations are the signal to
-look for.
+New rows are written to `outputs/front_end` and `outputs/temporal_decoders`;
+the files in `results/` are left untouched. Match each new row to the row with
+the same `run_name` in `results/front_end/all_rows.csv` or
+`results/temporal_decoders/all_rows.csv` and compare `test_bpb` and the energy
+columns. Floating-point results can differ in the last decimal places across
+CPU types and BLAS libraries; timing fields depend on the host.
 
-Rows are one-indexed and map directly to the frozen CSV grids in `configs/`.
+## Software environment
 
-## Reproducibility boundary
-
-The experiments were executed on the Bunya HPC system with Python 3.10.20,
-NumPy 2.2.6, SentencePiece 0.2.1, snnTorch 0.9.4, and PyTorch
-2.11.0+cu126. The models themselves were explicitly executed on CPU with one
-Torch, OpenMP, and MKL thread per task. The compact portable environment is in
-`environment.yml`; the path-sanitised Linux-64 Bunya export is retained in
-`environment-lock.yml`.
-
-The source commits, result commits, environment evidence, expected row counts,
-and archived hashes are listed in
-[docs/PROVENANCE.md](docs/PROVENANCE.md). Descriptive public filenames are
-mapped to their original development paths in
-[docs/SOURCE_MAPPING.md](docs/SOURCE_MAPPING.md). The integrity validator
-checks those declarations without calculating or interpreting paper findings.
+The reported runs used Python 3.10.20, NumPy 2.2.6, SentencePiece 0.2.1,
+snnTorch 0.9.4 and PyTorch 2.11.0+cu126 on the Bunya HPC system, with all
+models on CPU and one Torch, OpenMP and MKL thread per task. `environment.yml`
+pins these versions; `environment-lock.yml` is the full Linux-64 export of the
+original environment. Details are in
+[docs/EXECUTION_ENVIRONMENT.md](docs/EXECUTION_ENVIRONMENT.md); source
+commits, result commits and archive hashes are in
+[docs/PROVENANCE.md](docs/PROVENANCE.md).
 
 ## Licence
 
-This repository is released under the [MIT Licence](LICENSE). The three
-source corpora (TinyStories, Text8, WikiText-2) are not redistributed here
-and remain governed by their own original licences (see
-[docs/DATASETS.md](docs/DATASETS.md)).
-
-## Access and contributions
-
-This repository is currently private, shared with reviewers on request. It
-will be made public, with GitHub granting read/clone/fork access to the
-public while direct push access remains limited to the authors, as part of
-the paper's release. This project is not accepting direct external
-contributions; independent work should use a fork or separate clone.
+MIT; see [LICENSE](LICENSE). TinyStories, Text8 and WikiText-2 are not
+redistributed and remain under their original licences.
 
 ## Citation
 
-Citation metadata is provided in [`CITATION.cff`](CITATION.cff). The
-preferred-citation entry will be updated with the final publication venue and
-DOI once the paper is accepted.
+Citation metadata is in [CITATION.cff](CITATION.cff).

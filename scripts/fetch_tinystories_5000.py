@@ -1,27 +1,14 @@
 #!/usr/bin/env python3
-"""Rebuild the raw TinyStories-5000 source file used by this study.
+"""Build the TinyStories-5000 source file used by the experiments.
 
-This is the exact procedure used to originally produce
-``tinystories_5000.txt`` (preserved internally as
-``scripts/prepare_2026_06_03_data.py``): take the first 5,000 examples of the
-``roneneldan/TinyStories`` train split, in the dataset's own (unshuffled)
-order, strip each story, keep the non-empty ones, and join them with the
-``<|endoftext|>`` marker expected by
-``paper_code/scripts/prepare_canonical_splits.py``.
+Takes the first 5,000 examples of the ``roneneldan/TinyStories`` training
+split in the dataset's own order, strips each story, and joins them with the
+``<|endoftext|>`` marker read by
+``paper_code/scripts/prepare_canonical_splits.py``. The output is compared
+with the file used in the paper (4,262,315 bytes, SHA-256
+``afff3659756a01acd8c95ed8b16c67b0ad829cd8e3d7fc6161a1bc9982c04fb4``).
 
-Confirmed byte-for-byte: the author re-ran this exact procedure against the
-live ``roneneldan/TinyStories`` dataset and diffed the result against the
-original source file, which still exists at
-``/scratch/user/lukemccarthy/datasets/tinystories/tinystories_5000.txt`` on
-the Bunya HPC system and is recorded in the 2026-07-16 canonical manifest.
-Both are 4,262,315 bytes with SHA-256
-``afff3659756a01acd8c95ed8b16c67b0ad829cd8e3d7fc6161a1bc9982c04fb4``. This
-script checks its own output against that hash and reports PASS/FAIL
-immediately, before you spend any time on the canonical split step.
-
-Requires the optional ``datasets`` package (``pip install datasets``), which
-is not part of the pinned reproduction environment because it is only needed
-once, to build this single input file.
+Requires the ``datasets`` package (``pip install datasets``).
 
 Usage:
     python scripts/fetch_tinystories_5000.py --output data/sources/tinystories_5000.txt
@@ -66,8 +53,7 @@ def main() -> None:
     if len(texts) != args.count:
         raise SystemExit(
             f"Expected {args.count} non-empty documents in the first {args.count} "
-            f"examples, found {len(texts)}. This does not match what "
-            "prepare_canonical_splits.py requires; do not use this output."
+            f"examples, found {len(texts)}."
         )
 
     data = "\n<|endoftext|>\n".join(texts).encode("utf-8")
@@ -79,21 +65,12 @@ def main() -> None:
 
     if args.count == 5000:
         if len(data) == KNOWN_GOOD_BYTES and digest == KNOWN_GOOD_SHA256:
-            print("PASS: byte-identical to the original tinystories_5000.txt used by the paper.")
+            print("PASS: identical to the tinystories_5000.txt used in the paper.")
         else:
             print(
-                "FAIL: does not match the original source file "
-                f"({KNOWN_GOOD_BYTES} bytes, sha256 {KNOWN_GOOD_SHA256}). "
-                "The TinyStories dataset on Hugging Face may have changed since this "
-                "was confirmed, or something in this environment altered the text "
-                "(e.g. line-ending translation). Please report this before using the output."
+                "FAIL: differs from the tinystories_5000.txt used in the paper "
+                f"({KNOWN_GOOD_BYTES} bytes, SHA-256 {KNOWN_GOOD_SHA256})."
             )
-
-    print(
-        "Next: run `python reproduce.py prepare-data --tinystories-5000 "
-        f"{args.output} ...` (or `python scripts/verify_tinystories_5000.py "
-        f"--source {args.output}` to check just this file)."
-    )
 
 
 if __name__ == "__main__":
