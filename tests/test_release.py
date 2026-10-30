@@ -1,5 +1,6 @@
 from scripts.validate_release import (
     validate_accounting_corrections,
+    validate_documentation_changes,
     validate_environment_evidence,
     validate_front_end,
     validate_hashes,
@@ -35,3 +36,7 @@ def test_tokenizer_fit_archive() -> None:
 
 def test_accounting_corrections() -> None:
     validate_accounting_corrections()
+
+
+def test_documentation_changes() -> None:
+    validate_documentation_changes()

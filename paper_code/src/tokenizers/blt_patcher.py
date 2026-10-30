@@ -1,25 +1,8 @@
-"""
-BLT-style and Spike-BLT front-end utilities.
+"""Byte-patch tokenisation and spike-embedding utilities.
 
-This file separates two related but different ideas:
-
-1. BLT-style patch tokenizer
-   raw text -> UTF-8 bytes -> dynamic byte patches -> patch IDs
-
-   This behaves like a tokenizer and still requires model-side spike encoding.
-   It can be tested with rate, threshold, and temporal encoders.
-
-2. Spike-BLT front end
-   raw text -> UTF-8 bytes -> dynamic byte patches -> patch-level spike embeddings
-
-   This is a bridge toward spike-native byte/patch front ends. It can later be
-   passed to models through inputs_embeds=..., bypassing or reducing a generic
-   spike encoder.
-
-This is not a full Byte Latent Transformer implementation. Full BLT uses a
-learned next-byte entropy model for boundary selection. This first version uses
-fixed, boundary-aware, and entropy-proxy patching so the interface can be tested
-before adding learned entropy.
+Provides fixed, boundary-aware and entropy-proxy patching, a patch-ID
+vocabulary, and spike embeddings derived from byte histograms and patch
+lengths. Boundary selection does not use a learned next-byte entropy model.
 """
 
 from __future__ import annotations
@@ -344,24 +327,15 @@ class BLTPatchVocabProxy:
         return patcher
 
 
-# Backwards-compatible alias for earlier scripts/imports.
-# Prefer BLTPatchVocabProxy in new code.
+# Alias of BLTPatchVocabProxy.
 BLTPatcher = BLTPatchVocabProxy
 
 
 class SpikeBLTFrontend(nn.Module):
-    """
-    Spike-compatible BLT front end.
+    """Convert byte patches into embeddings from byte histograms and lengths.
 
-    This turns byte patches directly into patch-level spike embeddings. It is
-    intended for future model calls using inputs_embeds=..., bypassing or
-    reducing the need for a separate generic spike encoder.
-
-    Current feature representation:
-      - byte histogram over 256 possible byte values
-      - patch length feature
-      - projection to embedding dimension
-      - threshold/rate spike generation
+    Features are projected to the embedding dimension and encoded using
+    the selected spike mode.
     """
 
     def __init__(
