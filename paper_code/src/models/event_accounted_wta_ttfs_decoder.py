@@ -161,7 +161,7 @@ class EventAccountedTTFSPatchDecoder(LocalByteLIFDecoderContinuousTTFS):
         feedback_attempted_bytes = 0
         output_totals: Dict[str, float] = {}
         margin_loss = torch.zeros((), device=device)
-        fanin = [layer.input_mask.sum(dim=1).float().mean() for layer in self.layers]
+        input_fanout = [layer.input_mask.sum(dim=0) for layer in self.layers]
         recurrent_fanin = [layer.recurrent_mask.sum(dim=0).float().mean() for layer in self.layers]
 
         for position in range(self.max_patch_bytes):
@@ -172,7 +172,12 @@ class EventAccountedTTFSPatchDecoder(LocalByteLIFDecoderContinuousTTFS):
             final_spikes = None
             for index, layer in enumerate(self.layers):
                 membrane, previous_spikes = states[index]
-                input_accumulations += int((layer_input.detach() != 0).sum().item() * fanin[index].item())
+                input_accumulations += int(
+                    (
+                        (layer_input.detach() != 0).to(input_fanout[index].dtype)
+                        * input_fanout[index]
+                    ).sum().item()
+                )
                 recurrent_accumulations += int(previous_spikes.detach().sum().item() * recurrent_fanin[index].item())
                 membrane, final_spikes = layer.step(layer_input, membrane, previous_spikes)
                 membrane = membrane * active

@@ -2,7 +2,9 @@
 """Generate the result figures of the paper from the committed raw CSVs.
 
 Reads ``results/front_end/all_rows.csv`` and
-``results/temporal_decoders/all_rows.csv`` and writes three vector PDFs,
+``results/temporal_decoders_corrected/all_rows.csv`` (the output-head archive
+with corrected decoder input accumulations; see
+``scripts/correct_decoder_fanout.py``) and writes three vector PDFs,
 sized to the single-column text width of the Elsevier CAS template:
 
     rate_quality_tradeoff.pdf     test BPB against raw bytes per global step
@@ -31,7 +33,7 @@ from matplotlib.lines import Line2D
 
 ROOT = Path(__file__).resolve().parent.parent
 FRONT_END_CSV = ROOT / "results/front_end/all_rows.csv"
-TEMPORAL_CSV = ROOT / "results/temporal_decoders/all_rows.csv"
+TEMPORAL_CSV = ROOT / "results/temporal_decoders_corrected/all_rows.csv"
 
 # Single-column text width of cas-sc (468.33 pt) in inches.
 TEXT_WIDTH_IN = 468.33 / 72.27

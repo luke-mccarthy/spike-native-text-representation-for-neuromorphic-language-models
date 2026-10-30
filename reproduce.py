@@ -101,6 +101,11 @@ def execute(
         return
     environment = os.environ.copy()
     environment["SPIKE_TOKENIZER_CANONICAL_ROOT"] = str(data_root.resolve())
+    # Child scripts import ``scripts.*`` and ``src.*`` from paper_code/.
+    existing = environment.get("PYTHONPATH")
+    environment["PYTHONPATH"] = (
+        str(PAPER_CODE_ROOT) + (os.pathsep + existing if existing else "")
+    )
     subprocess.run(command, cwd=working_directory, env=environment, check=True)
 
 
@@ -150,6 +155,15 @@ def main() -> None:
     add_common_run_arguments(decoder)
 
     args = parser.parse_args()
+    # Child scripts run from paper_code/, so resolve relative paths here.
+    for name in (
+        "data_root", "output_root", "tokenizer_root", "text8_full",
+        "tinystories_5000", "wikitext2_train", "wikitext2_validation",
+        "wikitext2_test",
+    ):
+        path = getattr(args, name, None)
+        if isinstance(path, Path):
+            setattr(args, name, path.resolve())
     if args.command == "validate":
         subprocess.run(
             [sys.executable, "scripts/validate_release.py"], cwd=ROOT, check=True
