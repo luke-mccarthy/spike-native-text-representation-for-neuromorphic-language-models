@@ -1,0 +1,138 @@
+=== 2026_07_28_strict_ttfs_output_development_r4_r073_text8_fixed_patch8_hierarchical_lif_matched_v1_capacity_dense_reference_s1_t24_ddl0p060_sc8p000
+  test_bpb: new=3.521837820057065 archive=3.521837820057065 rel_diff=0.00e+00
+  train_decoder_input_synaptic_accumulations: new=517995328.0 archive=517995328.0 rel_diff=0.00e+00
+  validation_decoder_input_synaptic_accumulations: new=2327659648.0 archive=2327659648.0 rel_diff=0.00e+00
+  validation_patch_projected_end_to_end_energy_pj_central: new=984247246858.8 archive=984247246858.8 rel_diff=0.00e+00
+  train_decoder_context_spike_events: new=7749927.0 archive=7749927.0 rel_diff=0.00e+00
+  train_decoder_hidden_spike_events: new=49163867.0 archive=49163867.0 rel_diff=0.00e+00
+  train_decoder_output_early_exit_spike_events: new=MISSING archive=MISSING
+  train_decoder_output_spike_events: new=MISSING archive=MISSING
+  train_decoder_position_spike_events: new=1000000.0 archive=1000000.0 rel_diff=0.00e+00
+  train_decoder_teacher_byte_spike_events: new=1750000.0 archive=1750000.0 rel_diff=0.00e+00
+  train_global_input_spike_events: new=8187478.0 archive=8187478.0 rel_diff=0.00e+00
+  train_segmenter_spike_events: new=125000.0 archive=125000.0 rel_diff=0.00e+00
+  training_patch_routed_spike_events: new=288449408.0 archive=288449408.0 rel_diff=0.00e+00
+  validation_decoder_context_spike_events: new=34650932.0 archive=34650932.0 rel_diff=0.00e+00
+  validation_decoder_hidden_spike_events: new=177429239.0 archive=177429239.0 rel_diff=0.00e+00
+  validation_decoder_output_early_exit_spike_events: new=MISSING archive=MISSING
+  validation_decoder_output_spike_events: new=MISSING archive=MISSING
+  validation_decoder_position_spike_events: new=5000000.0 archive=5000000.0 rel_diff=0.00e+00
+  validation_decoder_teacher_byte_spike_events: new=8750000.0 archive=8750000.0 rel_diff=0.00e+00
+  validation_global_input_spike_events: new=40879726.0 archive=40879726.0 rel_diff=0.00e+00
+  validation_patch_routed_spike_events: new=388586950.0 archive=388586950.0 rel_diff=0.00e+00
+  validation_segmenter_spike_events: new=625000.0 archive=625000.0 rel_diff=0.00e+00
+=== 2026_07_28_strict_ttfs_output_development_r4_r076_text8_fixed_patch8_hierarchical_lif_matched_v1_capacity_ttfs_direct_256_s1_t16_ddl0p040_sc8p000
+  test_bpb: new=3.6305896974727805 archive=3.6305896974727805 rel_diff=0.00e+00
+  train_decoder_input_synaptic_accumulations: new=153778048.0 archive=153778048.0 rel_diff=0.00e+00
+  validation_decoder_input_synaptic_accumulations: new=633834752.0 archive=633834752.0 rel_diff=0.00e+00
+  validation_patch_projected_end_to_end_energy_pj_central: new=908117261660.4 archive=908117261660.4 rel_diff=0.00e+00
+  train_decoder_context_spike_events: new=2059032.0 archive=2059032.0 rel_diff=0.00e+00
+  train_decoder_hidden_spike_events: new=13152919.0 archive=13152919.0 rel_diff=0.00e+00
+  train_decoder_output_early_exit_spike_events: new=1987278.0 archive=1987278.0 rel_diff=0.00e+00
+  train_decoder_output_spike_events: new=993639.0 archive=993639.0 rel_diff=0.00e+00
+  train_decoder_position_spike_events: new=1000000.0 archive=1000000.0 rel_diff=0.00e+00
+  train_decoder_teacher_byte_spike_events: new=1750000.0 archive=1750000.0 rel_diff=0.00e+00
+  train_global_input_spike_events: new=8187478.0 archive=8187478.0 rel_diff=0.00e+00
+  train_segmenter_spike_events: new=125000.0 archive=125000.0 rel_diff=0.00e+00
+  training_patch_routed_spike_events: new=144621851.0 archive=144621851.0 rel_diff=0.00e+00
+  validation_decoder_context_spike_events: new=8184918.0 archive=8184918.0 rel_diff=0.00e+00
+  validation_decoder_hidden_spike_events: new=49909721.0 archive=49909721.0 rel_diff=0.00e+00
+  validation_decoder_output_early_exit_spike_events: new=9999982.0 archive=9999982.0 rel_diff=0.00e+00
+  validation_decoder_output_spike_events: new=4999991.0 archive=4999991.0 rel_diff=0.00e+00
+  validation_decoder_position_spike_events: new=5000000.0 archive=5000000.0 rel_diff=0.00e+00
+  validation_decoder_teacher_byte_spike_events: new=8750000.0 archive=8750000.0 rel_diff=0.00e+00
+  validation_global_input_spike_events: new=40879726.0 archive=40879726.0 rel_diff=0.00e+00
+  validation_patch_routed_spike_events: new=207701162.0 archive=207701162.0 rel_diff=0.00e+00
+  validation_segmenter_spike_events: new=625000.0 archive=625000.0 rel_diff=0.00e+00
+=== 2026_07_28_strict_ttfs_output_development_r4_r082_text8_fixed_patch8_hierarchical_lif_enlarged_capacity_dense_reference_s1_t24_ddl0p060_sc8p000
+  test_bpb: new=3.4910799612781704 archive=3.4910799612781704 rel_diff=0.00e+00
+  train_decoder_input_synaptic_accumulations: new=1037604360.0 archive=1037604360.0 rel_diff=0.00e+00
+  validation_decoder_input_synaptic_accumulations: new=3778906984.0 archive=3778906984.0 rel_diff=0.00e+00
+  validation_patch_projected_end_to_end_energy_pj_central: new=1044867458574.8 archive=1044867458574.8 rel_diff=0.00e+00
+  train_decoder_context_spike_events: new=7457796.0 archive=7457796.0 rel_diff=0.00e+00
+  train_decoder_hidden_spike_events: new=63726048.0 archive=63726048.0 rel_diff=0.00e+00
+  train_decoder_output_early_exit_spike_events: new=MISSING archive=MISSING
+  train_decoder_output_spike_events: new=MISSING archive=MISSING
+  train_decoder_position_spike_events: new=1000000.0 archive=1000000.0 rel_diff=0.00e+00
+  train_decoder_teacher_byte_spike_events: new=1750000.0 archive=1750000.0 rel_diff=0.00e+00
+  train_global_input_spike_events: new=8187478.0 archive=8187478.0 rel_diff=0.00e+00
+  train_segmenter_spike_events: new=125000.0 archive=125000.0 rel_diff=0.00e+00
+  training_patch_routed_spike_events: new=325403525.0 archive=325403525.0 rel_diff=0.00e+00
+  validation_decoder_context_spike_events: new=30118176.0 archive=30118176.0 rel_diff=0.00e+00
+  validation_decoder_hidden_spike_events: new=204106894.0 archive=204106894.0 rel_diff=0.00e+00
+  validation_decoder_output_early_exit_spike_events: new=MISSING archive=MISSING
+  validation_decoder_output_spike_events: new=MISSING archive=MISSING
+  validation_decoder_position_spike_events: new=5000000.0 archive=5000000.0 rel_diff=0.00e+00
+  validation_decoder_teacher_byte_spike_events: new=8750000.0 archive=8750000.0 rel_diff=0.00e+00
+  validation_global_input_spike_events: new=40879726.0 archive=40879726.0 rel_diff=0.00e+00
+  validation_patch_routed_spike_events: new=412889706.0 archive=412889706.0 rel_diff=0.00e+00
+  validation_segmenter_spike_events: new=625000.0 archive=625000.0 rel_diff=0.00e+00
+=== 2026_07_28_strict_ttfs_output_development_r4_r085_text8_fixed_patch8_hierarchical_lif_enlarged_capacity_ttfs_direct_256_s1_t16_ddl0p040_sc8p000
+  test_bpb: new=3.606737821378387 archive=3.606737821378387 rel_diff=0.00e+00
+  train_decoder_input_synaptic_accumulations: new=886652048.0 archive=886651628.0 rel_diff=4.74e-07
+  validation_decoder_input_synaptic_accumulations: new=3666246960.0 archive=3666246956.0 rel_diff=1.09e-09
+  validation_patch_projected_end_to_end_energy_pj_central: new=957117402495.0 archive=957117402471.0 rel_diff=2.51e-11
+  train_decoder_context_spike_events: new=7505095.0 archive=7505095.0 rel_diff=0.00e+00
+  train_decoder_hidden_spike_events: new=32938279.0 archive=32938279.0 rel_diff=0.00e+00
+  train_decoder_output_early_exit_spike_events: new=1987764.0 archive=1987764.0 rel_diff=0.00e+00
+  train_decoder_output_spike_events: new=993882.0 archive=993882.0 rel_diff=0.00e+00
+  train_decoder_position_spike_events: new=1000000.0 archive=1000000.0 rel_diff=0.00e+00
+  train_decoder_teacher_byte_spike_events: new=1750000.0 archive=1750000.0 rel_diff=0.00e+00
+  train_global_input_spike_events: new=8187478.0 archive=8187478.0 rel_diff=0.00e+00
+  train_segmenter_spike_events: new=125000.0 archive=125000.0 rel_diff=0.00e+00
+  training_patch_routed_spike_events: new=240864521.0 archive=240864521.0 rel_diff=0.00e+00
+  validation_decoder_context_spike_events: new=35624999.0 archive=35624999.0 rel_diff=0.00e+00
+  validation_decoder_hidden_spike_events: new=63762657.0 archive=63762657.0 rel_diff=0.00e+00
+  validation_decoder_output_early_exit_spike_events: new=9999998.0 archive=9999998.0 rel_diff=0.00e+00
+  validation_decoder_output_spike_events: new=4999999.0 archive=4999999.0 rel_diff=0.00e+00
+  validation_decoder_position_spike_events: new=5000000.0 archive=5000000.0 rel_diff=0.00e+00
+  validation_decoder_teacher_byte_spike_events: new=8750000.0 archive=8750000.0 rel_diff=0.00e+00
+  validation_global_input_spike_events: new=40879726.0 archive=40879726.0 rel_diff=0.00e+00
+  validation_patch_routed_spike_events: new=293314999.0 archive=293314999.0 rel_diff=0.00e+00
+  validation_segmenter_spike_events: new=625000.0 archive=625000.0 rel_diff=0.00e+00
+=== 2026_07_28_strict_ttfs_output_development_r4_r100_text8_joint_patch8_hierarchical_lif_enlarged_capacity_dense_reference_s1_t24_ddl0p060_sc8p000
+  test_bpb: new=3.4539159281504284 archive=3.4539159281504284 rel_diff=0.00e+00
+  train_decoder_input_synaptic_accumulations: new=1014452128.0 archive=1014452544.0 rel_diff=4.10e-07
+  validation_decoder_input_synaptic_accumulations: new=4147015736.0 archive=4146993952.0 rel_diff=5.25e-06
+  validation_patch_projected_end_to_end_energy_pj_central: new=1104513952065.4 archive=1104513821361.4 rel_diff=1.18e-07
+  train_decoder_context_spike_events: new=8206411.0 archive=8206411.0 rel_diff=0.00e+00
+  train_decoder_hidden_spike_events: new=59960161.0 archive=59960161.0 rel_diff=0.00e+00
+  train_decoder_output_early_exit_spike_events: new=MISSING archive=MISSING
+  train_decoder_output_spike_events: new=MISSING archive=MISSING
+  train_decoder_position_spike_events: new=1000000.0 archive=1000000.0 rel_diff=0.00e+00
+  train_decoder_teacher_byte_spike_events: new=1726294.0 archive=1726294.0 rel_diff=0.00e+00
+  train_global_input_spike_events: new=8573130.0 archive=8573130.0 rel_diff=0.00e+00
+  train_segmenter_spike_events: new=42200491.0 archive=42200491.0 rel_diff=0.00e+00
+  training_patch_routed_spike_events: new=367479499.0 archive=367479499.0 rel_diff=0.00e+00
+  validation_decoder_context_spike_events: new=37286340.0 archive=37286340.0 rel_diff=0.00e+00
+  validation_decoder_hidden_spike_events: new=194692390.0 archive=194692390.0 rel_diff=0.00e+00
+  validation_decoder_output_early_exit_spike_events: new=MISSING archive=MISSING
+  validation_decoder_output_spike_events: new=MISSING archive=MISSING
+  validation_decoder_position_spike_events: new=5000000.0 archive=5000000.0 rel_diff=0.00e+00
+  validation_decoder_teacher_byte_spike_events: new=8633750.0 archive=8633750.0 rel_diff=0.00e+00
+  validation_global_input_spike_events: new=42779462.0 archive=42779462.0 rel_diff=0.00e+00
+  validation_patch_routed_spike_events: new=510356252.0 archive=510356252.0 rel_diff=0.00e+00
+  validation_segmenter_spike_events: new=99746979.0 archive=99746979.0 rel_diff=0.00e+00
+=== 2026_07_28_strict_ttfs_output_development_r4_r103_text8_joint_patch8_hierarchical_lif_enlarged_capacity_ttfs_direct_256_s1_t16_ddl0p040_sc8p000
+  test_bpb: new=3.6079411713384575 archive=3.6079411713384575 rel_diff=0.00e+00
+  train_decoder_input_synaptic_accumulations: new=845946376.0 archive=845943364.0 rel_diff=3.56e-06
+  validation_decoder_input_synaptic_accumulations: new=3323242528.0 archive=3323204965.0 rel_diff=1.13e-05
+  validation_patch_projected_end_to_end_energy_pj_central: new=1033415941031.0 archive=1033415715653.0 rel_diff=2.18e-07
+  train_decoder_context_spike_events: new=7835176.0 archive=7835176.0 rel_diff=0.00e+00
+  train_decoder_hidden_spike_events: new=31472919.0 archive=31472919.0 rel_diff=0.00e+00
+  train_decoder_output_early_exit_spike_events: new=1988764.0 archive=1988764.0 rel_diff=0.00e+00
+  train_decoder_output_spike_events: new=994382.0 archive=994382.0 rel_diff=0.00e+00
+  train_decoder_position_spike_events: new=1000000.0 archive=1000000.0 rel_diff=0.00e+00
+  train_decoder_teacher_byte_spike_events: new=1726294.0 archive=1726294.0 rel_diff=0.00e+00
+  train_global_input_spike_events: new=8573130.0 archive=8573130.0 rel_diff=0.00e+00
+  train_segmenter_spike_events: new=42200491.0 archive=42200491.0 rel_diff=0.00e+00
+  training_patch_routed_spike_events: new=284936266.0 archive=284936266.0 rel_diff=0.00e+00
+  validation_decoder_context_spike_events: new=33608967.0 archive=33608967.0 rel_diff=0.00e+00
+  validation_decoder_hidden_spike_events: new=68261465.0 archive=68261465.0 rel_diff=0.00e+00
+  validation_decoder_output_early_exit_spike_events: new=9999848.0 archive=9999848.0 rel_diff=0.00e+00
+  validation_decoder_output_spike_events: new=4999924.0 archive=4999924.0 rel_diff=0.00e+00
+  validation_decoder_position_spike_events: new=5000000.0 archive=5000000.0 rel_diff=0.00e+00
+  validation_decoder_teacher_byte_spike_events: new=8633750.0 archive=8633750.0 rel_diff=0.00e+00
+  validation_global_input_spike_events: new=42779462.0 archive=42779462.0 rel_diff=0.00e+00
+  validation_patch_routed_spike_events: new=407726748.0 archive=407726748.0 rel_diff=0.00e+00
+  validation_segmenter_spike_events: new=99746979.0 archive=99746979.0 rel_diff=0.00e+00

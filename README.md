@@ -25,7 +25,8 @@ results/
 scripts/                  Integrity validator, TinyStories tools, decoder
                           accounting correction, figure script
 paper_code/               Model, training, evaluation and accounting code
-provenance/               Original copies of the files changed after the runs
+provenance/               Original copies of the files changed after the runs,
+                          and the rerun check of the decoder correction
 tests/                    Integrity tests
 environment.yml           Pinned software environment
 environment-lock.yml      Full export of the original HPC environment (Linux-64)
@@ -160,7 +161,10 @@ done
 ```
 
 Rows are one-indexed and correspond to the rows of the CSV grids in
-`configs/`.
+`configs/`. Each row runs on one CPU thread; on the original HPC nodes a
+dense-head row took about 20–25 minutes and a TTFS or adaptive-patch row up to
+about 65 minutes. Each output-head row is written to
+`outputs/temporal_decoders/<run_name>.csv`.
 
 ### 7. Apply the decoder accounting correction
 
@@ -202,7 +206,7 @@ It writes three PDFs:
 
 New rows are written to `outputs/front_end` and `outputs/temporal_decoders`;
 the files in `results/` are left untouched. Match each new row to the row with
-the same `run_name` in `results/front_end/all_rows.csv` or
+the same run name (for output-head rows, the file name without `.csv`) in `results/front_end/all_rows.csv` or
 `results/temporal_decoders_corrected/all_rows.csv` and compare `test_bpb` and
 the energy columns. Floating-point results can differ in the last decimal places across
 CPU types and BLAS libraries; timing fields depend on the host.

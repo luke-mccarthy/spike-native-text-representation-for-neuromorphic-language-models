@@ -30,6 +30,10 @@ export with local paths removed; it keeps Conda build strings and CUDA
 packages and is specific to Linux-64. `docs/bunya_environment.json` records
 the export's source revision and checksums.
 
+The rerun check in `docs/PROVENANCE.md` used Python 3.10.20, PyTorch
+2.11.0+cpu, NumPy 2.2.6, SentencePiece 0.2.1 and snnTorch 1.0.0, and
+reproduced the recorded BPB and spike-event counts exactly.
+
 `pytest` is an optional test dependency (`pip install .[test]`). The archived
 records do not include the CPU model. Wall-clock and CPU-time fields depend on
 the host.

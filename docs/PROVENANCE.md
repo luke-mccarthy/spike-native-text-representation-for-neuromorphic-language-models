@@ -50,6 +50,9 @@ recorded per-input multiplier. For two-layer decoders the layer-0 active-input
 total A₀ is rebuilt from the recorded context, feedback and position event
 counts, and (8 − m₀) × A₀ is added; A₀ is exact for fixed patches and uses the
 mean patch length of the shared segmentation for adaptive patches. The
+original TTFS counter truncated each per-step product to an integer, so where
+m₀ is 6.5 or 12.5 the corrected count can be lower than a rerun by up to 0.5
+per decoder step. The
 front-end comparison uses a different decoder whose count already used the
 configured fan-out, so its archive is unchanged.
 
@@ -58,6 +61,27 @@ corrected archive adds the column `decoder_input_fanout_correction_version`.
 `validate_release.py` checks the hashes of both archives and of the original
 copies, and checks that the corrected archive has the same 162 runs in the same
 order with identical `test_bpb`.
+
+### Rerun check
+
+Six Text8, seed-1 rows were rerun with the corrected counters on Bunya
+(grid rows 73, 76, 82, 85, 100 and 103: fixed and adaptive eight-byte patches,
+one- and two-layer decoders, dense and direct-TTFS heads). Test BPB and every
+spike-event count match the recorded archive exactly. Decoder input
+accumulations match `results/temporal_decoders_corrected/` as follows:
+
+| Row | Decoder | Validation relative difference | Train relative difference |
+|---|---|---|---|
+| 73, 76, 82 | One-layer dense and TTFS; two-layer dense, fixed patches | 0 | 0 |
+| 85 | Two-layer TTFS, fixed patches | 1.1 × 10⁻⁹ | 4.7 × 10⁻⁷ |
+| 100 | Two-layer dense, adaptive patches | 5.3 × 10⁻⁶ | 4.1 × 10⁻⁷ |
+| 103 | Two-layer TTFS, adaptive patches | 1.1 × 10⁻⁵ | 3.6 × 10⁻⁶ |
+
+The largest relative difference in projected central validation energy is
+2.2 × 10⁻⁷. The row-85 difference comes from the integer truncation in the
+original counter, the row-100 difference from the mean-patch-length step, and
+the row-103 difference from both. The column-by-column comparison and the software
+versions of the rerun are in `provenance/decoder_correction_rerun/`.
 
 The software environment was exported from the original Bunya Conda
 environment at development commit `e0e4b66faf8f47e19a62cbc43ee98e8066665418`.

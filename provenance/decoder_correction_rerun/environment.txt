@@ -1,0 +1,5 @@
+python 3.10.20 | packaged by conda-forge | (main, Mar  5 2026, 16:42:22) [GCC 14.3.0]
+torch 2.11.0+cpu
+numpy 2.2.6
+sentencepiece 0.2.1
+snntorch 1.0.0
