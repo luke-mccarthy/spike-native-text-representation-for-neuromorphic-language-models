@@ -7,6 +7,9 @@ authors:
   - family-names: McCarthy
     given-names: Luke
     affiliation: "James Cook University"
+  - family-names: Amirsoleimani
+    given-names: Amirali
+    affiliation: "York University"
   - family-names: Rahimi Azghadi
     given-names: Mostafa
     affiliation: "James Cook University"
@@ -20,6 +23,9 @@ preferred-citation:
     - family-names: McCarthy
       given-names: Luke
       affiliation: "James Cook University"
+    - family-names: Amirsoleimani
+      given-names: Amirali
+      affiliation: "York University"
     - family-names: Rahimi Azghadi
       given-names: Mostafa
       affiliation: "James Cook University"
